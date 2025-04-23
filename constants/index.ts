@@ -9,5 +9,5 @@ export const sidebarLinks = [
       route: "/university",
       label: "University",
     },
+    // Profile link removed - users can access profile through their info at the bottom
   ];
-  
