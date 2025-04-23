@@ -18,13 +18,11 @@ interface UserData {
   updatedAt?: string;
 }
 
-interface ProfilePageProps {
-  params: {
-    id: string;
-  }
+interface ProfileClientProps {
+  userId: string;
 }
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
+export const ProfileClient: React.FC<ProfileClientProps> = ({ userId }) => {
   const router = useRouter();
   const { data: session, status, update: updateSession } = useSession();
   const [isLoading, setIsLoading] = useState(true);
@@ -46,17 +44,15 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
       setIsLoading(true);
       
       try {
-        const currentUserId = params.id;
-        
         // Check if user is viewing their own profile, otherwise redirect
-        if (session?.user?.id !== currentUserId) {
+        if (session?.user?.id !== userId) {
           // For security, only allow users to edit their own profiles
           router.push(`/`);
           return;
         }
 
         // Fetch the user profile data
-        const response = await fetch(`/api/users/${currentUserId}`);
+        const response = await fetch(`/api/users/${userId}`);
         if (!response.ok) {
           throw new Error("Failed to load profile data");
         }
@@ -72,7 +68,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
     };
 
     getUserData();
-  }, [params, session, status, router]);
+  }, [userId, session, status, router]);
 
   // Handle successful profile update
   const handleProfileUpdate = async (updatedData: UserData) => {
@@ -140,4 +136,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
   );
 };
 
-export default ProfilePage;
+// This is a server component that handles the params
+export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  // Await and extract the id from params
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
+  
+  // Pass the resolved id to the client component
+  return <ProfileClient userId={id} />;
+}
