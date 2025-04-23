@@ -26,10 +26,11 @@ const FALLBACK_SUGGESTIONS = [
   "Create an illustration about faith that connects with modern audiences"
 ];
 
-const SermonForm = ({ initialMessage, onNewChat, chatId }: {
+const SermonForm = ({ initialMessage, onNewChat, chatId, onBackToChats }: {
   initialMessage?: string;
   onNewChat?: () => void; 
   chatId?: string;
+  onBackToChats?: () => void;
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: 'Greetings in Christ. How can I assist with your sermon preparation today?' }
@@ -238,6 +239,22 @@ const SermonForm = ({ initialMessage, onNewChat, chatId }: {
       saveSermon();
     }
   }, [messages, currentChatId, checkAuth]);
+
+  // Effect to add keyboard shortcut for going back (Esc key)
+  useEffect(() => {
+    if (!onBackToChats) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onBackToChats();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onBackToChats]);
 
   // Check for dismissed prompt status
   useEffect(() => {
