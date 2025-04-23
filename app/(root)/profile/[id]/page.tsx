@@ -18,7 +18,13 @@ interface UserData {
   updatedAt?: string;
 }
 
-const ProfilePage = ({ params }: { params: { id: string } }) => {
+interface ProfilePageProps {
+  params: {
+    id: string;
+  }
+}
+
+const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
   // In client components, directly use params.id but be aware it will be deprecated in the future
   const router = useRouter();
   const { data: session, status, update: updateSession } = useSession();
