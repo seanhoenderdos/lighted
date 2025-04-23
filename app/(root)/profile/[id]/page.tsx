@@ -25,7 +25,6 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
-  // In client components, directly use params.id but be aware it will be deprecated in the future
   const router = useRouter();
   const { data: session, status, update: updateSession } = useSession();
   const [isLoading, setIsLoading] = useState(true);
@@ -47,8 +46,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
       setIsLoading(true);
       
       try {
-        // Use params.id directly in this client component
-        // Note: This approach will eventually need to be updated in future Next.js versions
         const currentUserId = params.id;
         
         // Check if user is viewing their own profile, otherwise redirect
@@ -75,7 +72,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
     };
 
     getUserData();
-  }, [params.id, session, status, router]);
+  }, [params, session, status, router]);
 
   // Handle successful profile update
   const handleProfileUpdate = async (updatedData: UserData) => {
@@ -128,7 +125,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ params }) => {
       
       {isEditing && userData ? (
         <ProfileForm
-          userId={params.id}
+          userId={userData.id}
           initialData={userData}
           onCancel={() => setIsEditing(false)}
           onSaveSuccess={handleProfileUpdate}
