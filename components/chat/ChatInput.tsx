@@ -14,7 +14,7 @@ interface ChatInputProps {
   suggestions?: string[]; // Added suggestions prop
   onSelectSuggestion?: (suggestion: string) => void; // Added handler for suggestion selection
   maxSuggestions?: number; // Optional prop to limit the number of suggestions
-  variant?: 'default' | 'primary' | 'outline'; // Added variant prop for styling
+  variant?: 'default' | 'chat' | 'home'; // Updated to match ChatSuggestions' accepted variants
   showDisclaimer?: boolean; // New prop to control showing the disclaimer
 }
 
@@ -29,7 +29,7 @@ const ChatInput = ({
   suggestions = [], // Default to empty array
   onSelectSuggestion, // Handler for when a suggestion is selected
   maxSuggestions = 2, // Default to 2 suggestions max
-  variant = 'outline', // Default to outline variant
+  variant = 'default', // Changed default from 'outline' to 'default'
   showDisclaimer = true, // Default to showing the disclaimer
 }: ChatInputProps) => {
   // Handler for suggestion selection
