@@ -18,11 +18,18 @@ const eslintConfig = [
     ignores: [
       "node_modules/**", 
       ".next/**", 
+      "out/**",
+      "build/**",
+      "dist/**",
       "public/**",
+      ".cache/**",
+      ".eslintcache",
       "**/generated/**",         // Ignore all generated files
       "lib/generated/**",        // Specifically ignore Prisma generated files
       "**/*.generated.*",        // Ignore any files with .generated. in the name
-      "prisma/client/**"         // Ignore Prisma client
+      "prisma/client/**",        // Ignore Prisma client
+      "*.min.js",                // Ignore minified JS
+      "*.bundle.js"              // Ignore bundled JS
     ]
   },
   // Basic configurations using the compatibility layer
