@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "lint:strict": "eslint --max-warnings=0 .",
+    "format": "eslint --fix ."
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",
@@ -51,8 +54,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "prisma": "^6.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
