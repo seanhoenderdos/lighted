@@ -1,16 +1,16 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllChats, ChatSession, deleteChat, isAuthenticated } from '@/lib/chat-storage';
 import { formatDistanceToNow } from 'date-fns';
 import DeleteConfirmDialog from '@/components/ui/delete-confirm-dialog';
 import { Card } from '@/components/ui/card';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/lib/client-auth';
 import ChatInput from '@/components/chat/ChatInput';
 import ChatSuggestions from '@/components/chat/ChatSuggestions';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import ROUTES from '@/constants/routes';
+import { useChat } from '@/context/ChatProvider';
 
 // Fallback suggestions in case API call fails
 const FALLBACK_SUGGESTIONS = [
@@ -21,43 +21,43 @@ const FALLBACK_SUGGESTIONS = [
 ];
 
 const ChatHome = ({ onStartNewChat, onSelectChat }: {
-  onStartNewChat: (initialMessage?: string) => void;
+  onStartNewChat: (initialMessage?: string, options?: { denomination?: string; activeTab?: 'sermon' | 'exegesis' | 'counseling' }) => void;
   onSelectChat: (chatId: string) => void;
 }) => {
   const [input, setInput] = useState('');
-  const [chats, setChats] = useState<ChatSession[]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [chatToDelete, setChatToDelete] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
-  
-  // Get session data once without triggering re-renders
-  const { data: session, status } = useSession({ required: false });
-  const [username, setUsername] = useState('Guest');
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
-  
-  // Check if user has dismissed the sign-in prompt
-  const [hasUserDismissedPrompt, setHasUserDismissedPrompt] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('dismissed_signin_prompt') === 'true';
-    }
-    return false;
-  });
+  const [hasUserDismissedPrompt, setHasUserDismissedPrompt] = useState(false);
+  const [username, setUsername] = useState('Guest');
 
-  // Fetch AI-generated suggestions with cache-busting
+  // State for sermon options
+  const [denomination, setDenomination] = useState<string>('non-denominational');
+  const [activeTab, setActiveTab] = useState<'sermon' | 'exegesis' | 'counseling'>('sermon');
+
+  // Get user session using our auth hook
+  const { isAuthenticated, user, status } = useAuth();
+  
+  // Get chats from our chat context
+  const { chats, deleteChat: deleteContextChat } = useChat();
+
+  // Reference to track component mounting state
+  const isMountedRef = React.useRef(false);
+  const prevValuesRef = React.useRef({ denomination, activeTab });
+
+  // Fetch suggestions from the API
   const fetchSuggestions = useCallback(async () => {
+    setIsSuggestionsLoading(true);
+    setApiError(null);
+    
     try {
-      setIsSuggestionsLoading(true);
-      setApiError(null);
-      
       // Ensure we have a fresh request each time by using direct fetch API
       const timestamp = new Date().getTime();
       const random = Math.random().toString(36).substring(2, 10);
-      const uniqueUrl = `/api/suggestions?count=7&nocache=${timestamp}-${random}`;
-      
-      console.log(`Fetching suggestions from: ${uniqueUrl}`);
+      const uniqueUrl = `/api/suggestions?count=7&nocache=${timestamp}-${random}&denomination=${denomination}&activeTab=${activeTab}`;
       
       const response = await fetch(uniqueUrl, { 
         method: 'GET',
@@ -69,111 +69,95 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
       });
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`API error (${response.status}): ${errorText}`);
         throw new Error(`Failed to fetch suggestions: ${response.statusText}`);
       }
       
       const data = await response.json();
-      console.log('API Response:', data);
       
-      // Check if data.suggestions is an array - this is the proper format
+      // Check if data.suggestions is an array
       if (Array.isArray(data.suggestions) && data.suggestions.length > 0) {
-        console.log(`Setting ${data.suggestions.length} new suggestions:`, data.suggestions);
-        // Only use string suggestions to prevent the React child error
-        const stringOnlySuggestions = data.suggestions.filter(
-          (suggestion: unknown): suggestion is string => typeof suggestion === 'string'
-        );
-        setSuggestions(stringOnlySuggestions);
+        setSuggestions(data.suggestions);
       } else {
-        console.warn('No suggestions returned from API, using fallbacks');
         setSuggestions(FALLBACK_SUGGESTIONS);
       }
     } catch (error) {
       console.error('Error fetching suggestions:', error);
-      setApiError(error instanceof Error ? error.message : 'Failed to load suggestions');
+      setApiError('Unable to load suggestions. Please try again.');
       setSuggestions(FALLBACK_SUGGESTIONS);
     } finally {
       setIsSuggestionsLoading(false);
     }
-  }, []);
-
-  // Create a memoized function to load chats
-  const loadChats = useCallback(async () => {
-    if (isUserAuthenticated) {
-      setChats(getAllChats());
-    } else {
-      setChats([]);
+  }, [denomination, activeTab]);
+  
+  // Update suggestions when dropdown values change
+  useEffect(() => {
+    // Skip the initial render
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
     }
-  }, [isUserAuthenticated]);
 
-  // Check auth status only once when status changes
+    // Only fetch if dropdown values actually changed
+    const prevValues = prevValuesRef.current;
+    if (prevValues.denomination !== denomination || prevValues.activeTab !== activeTab) {
+      // Update ref with current values
+      prevValuesRef.current = { denomination, activeTab };
+      
+      // Only fetch if not already loading
+      if (!isSuggestionsLoading) {
+        fetchSuggestions();
+      }
+    }
+  }, [denomination, activeTab, isSuggestionsLoading, fetchSuggestions]);
+
+  // Check auth status when status changes
   useEffect(() => {
     if (status === 'loading') return;
     
-    const checkAuthStatus = async () => {
-      try {
-        const authStatus = await isAuthenticated();
-        setIsUserAuthenticated(authStatus);
-        
-        if (status === 'authenticated' && session?.user?.name) {
-          setUsername(session.user.name);
-        }
-      } catch (error) {
-        console.error('Error checking auth status:', error);
-      }
-    };
+    if (status === 'authenticated' && user?.name) {
+      setUsername(user.name);
+    }
     
-    checkAuthStatus();
-  }, [status, session?.user?.name]);
-  
-  // Load chats only when auth status changes
-  useEffect(() => {
-    loadChats();
-  }, [isUserAuthenticated, loadChats]);
+    // Check if user has dismissed sign-in prompt before
+    if (typeof window !== 'undefined') {
+      setHasUserDismissedPrompt(localStorage.getItem('dismissed_signin_prompt') === 'true');
+    }
 
-  // Fetch suggestions when component mounts
-  useEffect(() => {
-    console.log('Initializing suggestions...');
-    // Set loading state immediately to improve UX
-    setIsSuggestionsLoading(true);
-    // Brief timeout to ensure consistent loading state display
-    setTimeout(() => {
-      fetchSuggestions();
-    }, 100);
-    
-    return () => {
-      // Clean up
-      setApiError(null);
-    };
-  }, [fetchSuggestions]);
+    // Fetch initial suggestions
+    fetchSuggestions();
+  }, [status, user?.name, fetchSuggestions]);
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
       // Check if we need to show the sign-in prompt
-      if (!isUserAuthenticated && !hasUserDismissedPrompt) {
+      if (!isAuthenticated && !hasUserDismissedPrompt) {
         setShowSignInPrompt(true);
         return;
       }
       
       // Otherwise proceed with creating the chat
-      onStartNewChat(input);
+      onStartNewChat(input, { denomination, activeTab });
     }
   };
 
+  // Handle suggestion click
   const handleSuggestionClick = (suggestion: string) => {
+    // Set the input first for better UX
+    setInput(suggestion);
+    
     // Check if we need to show the sign-in prompt
-    if (!isUserAuthenticated && !hasUserDismissedPrompt) {
-      setInput(suggestion);
+    if (!isAuthenticated && !hasUserDismissedPrompt) {
       setShowSignInPrompt(true);
       return;
     }
     
     // Otherwise proceed with creating the chat
-    onStartNewChat(suggestion);
+    onStartNewChat(suggestion, { denomination, activeTab });
   };
 
+  // Handle continuing without signing in
   const handleProceedWithoutSignIn = () => {
     // Save the user's preference
     localStorage.setItem('dismissed_signin_prompt', 'true');
@@ -182,8 +166,31 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
     
     // Now proceed with the chat
     if (input.trim()) {
-      onStartNewChat(input);
+      onStartNewChat(input, { denomination, activeTab });
     }
+  };
+
+  // Handle denomination change
+  const handleDenominationChange = (value: string) => {
+    setDenomination(value);
+    
+    // Also save to user preferences if they're logged in
+    if (isAuthenticated) {
+      try {
+        fetch('/api/users/preferences', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ denomination: value })
+        });
+      } catch (error) {
+        console.error('Error saving denomination preference:', error);
+      }
+    }
+  };
+
+  // Handle tab change
+  const handleTabChange = (tab: 'sermon' | 'exegesis' | 'counseling') => {
+    setActiveTab(tab);
   };
 
   // Format the timestamp for display
@@ -205,15 +212,13 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
   // Confirm chat deletion
   const handleConfirmDelete = async () => {
     if (chatToDelete) {
-      const isDeleted = await deleteChat(chatToDelete);
+      const isDeleted = await deleteContextChat(chatToDelete);
       
       if (isDeleted) {
-        // Only refresh the chat list if the delete was successful
-        loadChats();
+        // The chat list is automatically updated via the context
+        setIsDeleteDialogOpen(false);
+        setChatToDelete(null);
       }
-      
-      setIsDeleteDialogOpen(false);
-      setChatToDelete(null);
     }
   };
 
@@ -228,7 +233,7 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
             </h1>
           </div>
 
-          {/* Suggestions with loading state - refresh button removed */}
+          {/* Suggestions with loading state */}
           {isSuggestionsLoading ? (
             <div className="flex flex-col space-y-3 my-6 px-4">
               {[...Array(3)].map((_, i) => (
@@ -258,13 +263,18 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
               setInput={setInput}
               onSubmit={handleSubmit}
               placeholder="What would you like assistance with?"
-              isFixed={false}
+              _isFixed={false}
               showDisclaimer={true}
+              showOptionsBar={true}
+              denomination={denomination}
+              activeTab={activeTab}
+              onDenominationChange={handleDenominationChange}
+              onTabChange={handleTabChange}
             />
           </div>
 
           {/* Recent sermons - Only shown if there are sermons and user is authenticated */}
-          {isUserAuthenticated && chats.length > 0 && (
+          {isAuthenticated && chats.length > 0 && (
             <div className="mt-12">
               <h2 className="text-lg font-medium mb-4">History</h2>
               <div className="flex flex-col gap-2.5">
@@ -374,10 +384,6 @@ const ChatHome = ({ onStartNewChat, onSelectChat }: {
           100% {
             text-shadow: 0 0 5px rgba(20, 184, 166, 0.3);
           }
-        }
-        
-        :root.dark .username-glow {
-          color: white;
         }
         
         :root.dark .username-glow {

@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import {
   Sheet,
@@ -11,12 +13,16 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 import NavLinks from "./NavLinks";
-import { auth } from "@/auth";
+import { useSession, signOut } from "next-auth/react";
 
-const MobileNavigation = async () => {
-  const session = await auth();
+const MobileNavigation = () => {
+  const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const userId = session?.user?.id || '';
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: true });
+  };
 
   return (
     <Sheet>
@@ -73,17 +79,13 @@ const MobileNavigation = async () => {
                 </div>
 
                 <SheetClose asChild>
-                  <form action={async () => {
-                    'use server';
-                    await import("next-auth/react").then(({ signOut }) => signOut());
-                  }}>
-                    <Button
-                      className="small-medium light-border-2 min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none"
-                      type="submit"
-                    >
-                      Sign out
-                    </Button>
-                  </form>
+                  <Button
+                    onClick={handleSignOut}
+                    className="small-medium light-border-2 min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none"
+                    type="button"
+                  >
+                    Sign out
+                  </Button>
                 </SheetClose>
               </>
             ) : (
@@ -91,7 +93,7 @@ const MobileNavigation = async () => {
                 <SheetClose asChild>
                   <Link href={ROUTES.SIGN_IN}>
                     <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
-                      <span className="primary-text-gradient">Sign in</span>
+                      Sign in
                     </Button>
                   </Link>
                 </SheetClose>

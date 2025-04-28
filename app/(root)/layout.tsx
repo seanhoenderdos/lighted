@@ -1,20 +1,23 @@
 import React, { ReactNode } from "react";
 import Navbar from "@/components/navigation/navbar";
 import LeftSidebar from "@/components/navigation/LeftSidebar";
+import { ChatProvider } from "@/context/ChatProvider";
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="background-light850_dark100 relative">
-      <Navbar />
+    <ChatProvider>
+      <main className="background-light850_dark100 relative h-screen flex flex-col">
+        <Navbar />
 
-      <div className="flex">
-        <LeftSidebar />
+        <div className="flex flex-1 overflow-hidden">
+          <LeftSidebar />
 
-        <section className="min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
-        </section>
-      </div>
-    </main>
+          <section className="flex-1 pt-24 max-md:pb-14 overflow-y-auto">
+            <div className="w-full">{children}</div>
+          </section>
+        </div>
+      </main>
+    </ChatProvider>
   );
 };
 

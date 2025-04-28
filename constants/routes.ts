@@ -11,6 +11,15 @@ const ROUTES = {
       return `/profile/${id}`;
     },
   },
+  CHAT: {
+    HOME: "/chat",
+    CONVERSATION: (chatId: string | undefined) => {
+      // If chatId is undefined or empty, return to chat home
+      if (!chatId) return "/chat";
+      // Otherwise, return the proper chat path with ID
+      return `/chat/${chatId}`;
+    },
+  },
 };
 
 export default ROUTES;

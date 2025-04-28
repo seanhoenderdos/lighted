@@ -111,27 +111,29 @@ export const ProfileClient: React.FC<ProfileClientProps> = ({ userId }) => {
   }
 
   return (
-    <div className="container max-w-3xl py-10 font-montserrat">
-      <div className="mb-8">
+    <div className="w-full px-4 md:px-6 py-6 md:py-10 pb-20">
+      <div className="max-w-3xl mx-auto mb-8">
         <h1 className="text-3xl font-bold mb-2">Your Account</h1>
         <p className="text-muted-foreground">
-          {isEditing ? "Update your account information" : "View and manage your account settings"}
+          {isEditing ? "Make changes to your profile below" : "View and manage your account settings"}
         </p>
       </div>
       
-      {isEditing && userData ? (
-        <ProfileForm
-          userId={userData.id}
-          initialData={userData}
-          onCancel={() => setIsEditing(false)}
-          onSaveSuccess={handleProfileUpdate}
-        />
-      ) : userData ? (
-        <ProfileView
-          user={userData}
-          onEditClick={() => setIsEditing(true)}
-        />
-      ) : null}
+      <div className="max-w-3xl mx-auto">
+        {isEditing && userData ? (
+          <ProfileForm
+            userId={userData.id}
+            initialData={userData}
+            onCancel={() => setIsEditing(false)}
+            onSaveSuccess={handleProfileUpdate}
+          />
+        ) : userData ? (
+          <ProfileView
+            user={userData}
+            onEditClick={() => setIsEditing(true)}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };

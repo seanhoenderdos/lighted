@@ -81,6 +81,22 @@ export const createChat = async (
   const chats = getAllChats();
   const now = Date.now();
   
+  // Check for potential duplicates before creating a new chat
+  const firstUserMessage = initialMessages.find(msg => msg.role === 'user')?.content;
+  if (firstUserMessage) {
+    // Look for an existing chat with the same first user message
+    const existingChat = chats.find(chat => {
+      const chatFirstUserMessage = chat.messages.find(m => m.role === 'user')?.content;
+      return chatFirstUserMessage === firstUserMessage;
+    });
+    
+    // If a duplicate exists, return it instead of creating a new one
+    if (existingChat) {
+      console.log('Found duplicate chat, returning existing one');
+      return existingChat;
+    }
+  }
+  
   // Get user session to associate the chat with the user
   const session = await getSession();
   
@@ -204,4 +220,63 @@ export const getTempChatSession = (messages: ChatMessage[]): ChatSession => {
     createdAt: Date.now(),
     updatedAt: Date.now()
   };
+};
+
+/**
+ * Remove duplicate chats from localStorage
+ * This is useful for cleaning up any duplicate chats that were created before duplicate prevention was implemented
+ * Returns true if any duplicates were removed
+ */
+export const cleanupDuplicateChats = async (): Promise<boolean> => {
+  // Check if user is authenticated
+  const authenticated = await isAuthenticated();
+  if (!authenticated) {
+    console.log('Cannot cleanup sermons: User not authenticated');
+    return false;
+  }
+  
+  const chats = getAllChats();
+  if (chats.length <= 1) return false;
+  
+  // Track first messages to identify duplicates
+  const firstMessages = new Map<string, string[]>();
+  
+  // Collect potential duplicates
+  chats.forEach(chat => {
+    const firstUserMessage = chat.messages.find(msg => msg.role === 'user')?.content;
+    if (firstUserMessage) {
+      if (!firstMessages.has(firstUserMessage)) {
+        firstMessages.set(firstUserMessage, []);
+      }
+      firstMessages.get(firstUserMessage)?.push(chat.id);
+    }
+  });
+  
+  // Create a set of chat IDs to keep (newest of each duplicate group)
+  const idsToDelete = new Set<string>();
+  
+  firstMessages.forEach((chatIds) => {
+    // If there are duplicates
+    if (chatIds.length > 1) {
+      // Find the ids of chats to remove (keeping only the newest)
+      const chatsWithSameFirstMessage = chats
+        .filter(chat => chatIds.includes(chat.id))
+        .sort((a, b) => b.updatedAt - a.updatedAt); // Sort newest first
+      
+      // Keep the newest, mark the rest for deletion
+      for (let i = 1; i < chatsWithSameFirstMessage.length; i++) {
+        idsToDelete.add(chatsWithSameFirstMessage[i].id);
+      }
+    }
+  });
+  
+  // If there are no duplicates, return early
+  if (idsToDelete.size === 0) return false;
+  
+  // Remove the duplicate chats
+  const uniqueChats = chats.filter(chat => !idsToDelete.has(chat.id));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(uniqueChats));
+  
+  console.log(`Removed ${idsToDelete.size} duplicate chats`);
+  return true;
 };

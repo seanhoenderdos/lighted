@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
+import Image from "next/image";
 
 import {
   Card,
@@ -192,24 +193,35 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   };
 
   return (
-    <Card className="border-border">
+    <Card className="border-border overflow-hidden shadow-md mb-10">
       {/* Basic Profile Information Form */}
       <Form {...profileForm}>
         <form
           onSubmit={profileForm.handleSubmit(onSubmitProfile)}
           className="font-montserrat"
         >
-          <CardHeader className="border-b border-border">
-            <CardTitle>Edit Profile</CardTitle>
-            <CardDescription>Update your account information</CardDescription>
+          <CardHeader className="border-b border-border bg-gradient-to-r from-primary/10 to-transparent py-8 flex flex-col justify-center">
+            <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
+            <CardDescription className="text-sm mt-1">Manage your personal information</CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6 pt-6">
+          <CardContent className="space-y-8 pt-6 px-6">
             {/* Basic Information - Side by side on desktop */}
-            <div className="space-y-4">
-              <h3 className="font-semibold text-lg">Basic Information</h3>
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Image 
+                    src="/icons/user.svg" 
+                    width={16} 
+                    height={16} 
+                    alt="Basic Information"
+                    className="opacity-70" 
+                  />
+                </div>
+                <h3 className="font-semibold text-xl">Basic Information</h3>
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
                 <FormField
                   control={profileForm.control}
                   name="name"
@@ -276,21 +288,26 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             </div>
           </CardContent>
 
-          <CardFooter className="border-t border-border pt-6 flex flex-wrap justify-between md:justify-end gap-4">
+          <CardFooter className="border-t border-border pt-6 px-6 pb-6 flex flex-wrap justify-between gap-4 bg-muted/5">
             <Button
               type="button"
               variant="outline"
               onClick={onCancel}
-              className="min-h-12 rounded-1.5 px-4 py-3"
+              className="min-h-12 rounded-lg px-6 py-3 border-border/60 hover:bg-muted/20 w-full sm:w-auto"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSavingProfile}
-              className="min-h-12 rounded-1.5 px-4 py-3 bg-primary text-white font-medium"
+              className="min-h-12 rounded-lg px-6 py-3 bg-primary text-white font-medium hover:bg-primary/90 w-full sm:w-auto"
             >
-              {isSavingProfile ? "Saving..." : "Save Changes"}
+              {isSavingProfile ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <span>Saving...</span>
+                </>
+              ) : "Save Changes"}
             </Button>
           </CardFooter>
         </form>
@@ -314,7 +331,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       {/* Password Update Form - Only shown when toggled */}
       {showPasswordSection && (
         <div className="px-6 pb-6">
-          <Card className="border-border bg-muted/30">
+          <Card className="border-border/50 bg-muted/10 overflow-hidden shadow-sm">
             <Form {...passwordForm}>
               <form onSubmit={passwordForm.handleSubmit(onSubmitPassword)} className="font-montserrat">
                 <CardHeader>
@@ -381,21 +398,26 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                   />
                 </CardContent>
 
-                <CardFooter className="border-t border-border pt-6 flex justify-end space-x-4">
+                <CardFooter className="border-t border-border/30 pt-6 flex flex-wrap justify-between gap-4 bg-muted/5">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setShowPasswordSection(false)}
-                    className="min-h-12 rounded-1.5 px-4 py-3"
+                    className="min-h-12 rounded-lg px-4 py-3 border-border/60 hover:bg-muted/20 w-full sm:w-auto"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={isSavingPassword}
-                    className="min-h-12 rounded-1.5 px-4 py-3 bg-primary text-white font-medium"
+                    className="min-h-12 rounded-lg px-6 py-3 bg-primary text-white font-medium hover:bg-primary/90 w-full sm:w-auto"
                   >
-                    {isSavingPassword ? "Updating..." : "Update Password"}
+                    {isSavingPassword ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        <span>Updating...</span>
+                      </>
+                    ) : "Update Password"}
                   </Button>
                 </CardFooter>
               </form>
