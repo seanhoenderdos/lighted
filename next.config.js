@@ -33,6 +33,39 @@ const nextConfig = {
         child_process: false,
         '@prisma/client': false,
         '.prisma/client': false,
+        // Add fallbacks for node: protocol imports
+        'async_hooks': false,
+        'events': false,
+      };
+      
+      // Handle node: protocol URLs
+      config.module = config.module || {};
+      config.module.rules = config.module.rules || [];
+      config.module.rules.push({
+        test: /\/node_modules\/@prisma\/client\/runtime\/library\.mjs$/,
+        use: 'null-loader'
+      });
+      
+      // Replace all node: protocol imports with our empty shim module
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'node:async_hooks': require.resolve('./lib/shims/empty.js'),
+        'node:child_process': require.resolve('./lib/shims/empty.js'),
+        'node:events': require.resolve('./lib/shims/empty.js'),
+        'node:fs': require.resolve('./lib/shims/empty.js'),
+        'node:fs/promises': require.resolve('./lib/shims/empty.js'),
+        'node:path': require.resolve('./lib/shims/empty.js'),
+        'node:os': require.resolve('./lib/shims/empty.js'),
+        'node:crypto': require.resolve('./lib/shims/empty.js'),
+        'node:url': require.resolve('./lib/shims/empty.js'),
+        'node:net': require.resolve('./lib/shims/empty.js'),
+        'node:tls': require.resolve('./lib/shims/empty.js'),
+        'node:stream': require.resolve('./lib/shims/empty.js'),
+        'node:buffer': require.resolve('./lib/shims/empty.js'),
+        'node:util': require.resolve('./lib/shims/empty.js'),
+        'node:process': require.resolve('./lib/shims/empty.js'),
+        'node:http': require.resolve('./lib/shims/empty.js'),
+        'node:https': require.resolve('./lib/shims/empty.js'),
       };
     }
     
