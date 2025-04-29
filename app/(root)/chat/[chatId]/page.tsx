@@ -1,60 +1,11 @@
-'use client';
+import { ChatClient } from './chat-client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import SermonForm from '@/components/forms/SermonForm';
-import { useChat } from '@/context/ChatProvider';
-import ROUTES from '@/constants/routes';
-import LoadingIndicator from '@/components/chat/LoadingIndicator';
-
-// Update the interface to match Next.js 15's expected type
-interface ChatPageProps {
-  params: {
-    chatId: string;
-  };
-  searchParams?: Record<string, string | string[] | undefined>;
-}
-
-export default function ChatPage({ params }: ChatPageProps) {
-  const { loadChat, navigateToNewChat, loadingChat } = useChat();
-  const router = useRouter();
-  const chatId = params.chatId;
-  const [isLoaded, setIsLoaded] = useState(false);
+// Server component receives the params as a Promise in Next.js 15
+export default async function ChatPage({ params }: { params: Promise<{ chatId: string }> }) {
+  // Await and extract the chatId from params
+  const resolvedParams = await params;
+  const chatId = resolvedParams.chatId;
   
-  useEffect(() => {
-    async function fetchChat() {
-      // This will load the chat from localStorage
-      const chat = await loadChat(chatId);
-      
-      if (!chat) {
-        // Chat not found in localStorage, redirect to chat home
-        router.push(ROUTES.CHAT.HOME);
-        return;
-      }
-      
-      setIsLoaded(true);
-    }
-    
-    fetchChat();
-  }, [chatId, loadChat, router]);
-  
-  // Show loading while fetching chat data
-  if (!isLoaded || loadingChat) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-100px)]">
-        <LoadingIndicator />
-        <p className="mt-4 text-muted-foreground">Loading chat...</p>
-      </div>
-    );
-  }
-  
-  // Show the SermonForm with the chat ID
-  return (
-    <SermonForm
-      key={chatId}
-      chatId={chatId}
-      onBackToChats={() => router.push(ROUTES.CHAT.HOME)}
-      onNewChat={navigateToNewChat}
-    />
-  );
+  // Pass the resolved chatId to the client component
+  return <ChatClient chatId={chatId} />;
 }
