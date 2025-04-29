@@ -41,14 +41,16 @@ const nextConfig = {
       // Handle node: protocol URLs
       config.module = config.module || {};
       config.module.rules = config.module.rules || [];
-      config.module.rules.push({
-        test: /\/node_modules\/@prisma\/client\/runtime\/library\.mjs$/,
-        use: 'null-loader'
-      });
+      
+      // No longer using null-loader for Prisma runtime, instead use our custom shim
+      // that provides the necessary exports
       
       // Replace all node: protocol imports with our empty shim module
       config.resolve.alias = {
         ...config.resolve.alias,
+        // Use our custom prisma runtime shim that provides PrismaClientKnownRequestError
+        '@prisma/client/runtime/library': require.resolve('./lib/shims/prisma-runtime.js'),
+        // Continue using empty shim for node: protocol imports
         'node:async_hooks': require.resolve('./lib/shims/empty.js'),
         'node:child_process': require.resolve('./lib/shims/empty.js'),
         'node:events': require.resolve('./lib/shims/empty.js'),
