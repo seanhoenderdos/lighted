@@ -99,7 +99,7 @@ const SermonForm = ({
         }
       }
     } catch (error) {
-      console.error('Error detecting Bible references:', error);
+      console.info('Error detecting Bible references:', error);
     } finally {
       setIsAnalyzingReferences(false);
     }
@@ -135,7 +135,7 @@ const SermonForm = ({
       
       return [];
     } catch (error) {
-      console.error('Error fetching suggestions:', error);
+      console.info('Error fetching suggestions:', error);
       return [];
     } finally {
       setIsFetchingSuggestions(false);
@@ -248,7 +248,7 @@ const SermonForm = ({
       setSuggestions(newSuggestions);
       
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.info('Error sending message:', error);
       setMessages([...newMessages, { role: 'assistant' as const, content: 'Sorry, there was an error connecting to the server. Please try again.' }]);
     } finally {
       setLoading(false);
@@ -308,7 +308,7 @@ const SermonForm = ({
           }
         })
         .catch(error => {
-          console.error('Error fetching initial suggestions:', error);
+          console.info('Error fetching initial suggestions:', error);
           setSuggestions(FALLBACK_SUGGESTIONS);
         });
     }
@@ -345,7 +345,7 @@ const SermonForm = ({
           
           // If this appears to be a duplicate, don't save it
           if (isDuplicate) {
-            console.log('Prevented saving duplicate chat');
+            console.info('Prevented saving duplicate chat');
             setSaveStatus('saved'); // Mark as "saved" to avoid confusion
             return;
           }
@@ -368,7 +368,7 @@ const SermonForm = ({
           if (updated) setHasSaved(true);
         }
       } catch (error) {
-        console.error('Error saving sermon:', error);
+        console.info('Error saving sermon:', error);
         setSaveStatus('unsaved');
       }
     }, 1000); // 1 second debounce
@@ -432,7 +432,7 @@ const SermonForm = ({
           }
         }
       } catch (error) {
-        console.error('Error loading user preferences:', error);
+        console.info('Error loading user preferences:', error);
       }
     };
     
@@ -471,7 +471,7 @@ const SermonForm = ({
           body: JSON.stringify({ denomination: value })
         });
       } catch (error) {
-        console.error('Error saving denomination preference:', error);
+        console.info('Error saving denomination preference:', error);
       }
     }
   };

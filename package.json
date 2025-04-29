@@ -32,6 +32,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "eventsource-parser": "^3.0.1",
+    "framer-motion": "^12.9.2",
     "genkit": "^1.6.0",
     "groq": "^3.85.1",
     "groq-sdk": "^0.19.0",
