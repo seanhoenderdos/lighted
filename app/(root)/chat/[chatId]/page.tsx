@@ -7,10 +7,12 @@ import { useChat } from '@/context/ChatProvider';
 import ROUTES from '@/constants/routes';
 import LoadingIndicator from '@/components/chat/LoadingIndicator';
 
+// Update the interface to match Next.js 15's expected type
 interface ChatPageProps {
   params: {
     chatId: string;
   };
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
 export default function ChatPage({ params }: ChatPageProps) {
