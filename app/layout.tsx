@@ -5,6 +5,8 @@ import ThemeProvider from "@/context/Theme";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const audiowide = localfont({
   src: "./fonts/audiowideReg.ttf",
@@ -49,7 +51,11 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <body
           className={`${montserrat.variable} ${audiowide.variable} ${orbitron.variable} antialiased`}
         >
-          <ThemeProvider attribute="class">{children}</ThemeProvider>
+          <ThemeProvider attribute="class">
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
           <Toaster />
         </body>
       </SessionProvider>
