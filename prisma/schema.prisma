@@ -43,22 +43,23 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  username      String?   @unique
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  bio           String?   @db.Text
-  denomination  String?
-  church        String?
-  location      String?
-  accounts      Account[]
-  sessions      Session[]
-  chats         Chat[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                 String               @id @default(cuid())
+  name               String?
+  username           String?              @unique
+  email              String?              @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  bio                String?              @db.Text
+  denomination       String?
+  church             String?
+  location           String?
+  accounts           Account[]
+  sessions           Session[]
+  chats              Chat[]
+  passwordResetToken PasswordResetToken[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
 }
 
 model VerificationToken {
@@ -67,6 +68,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 // Chat Models
