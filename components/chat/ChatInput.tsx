@@ -74,8 +74,7 @@ const ChatInput = ({
   onDenominationChange,
   activeTab = 'sermon',
   onTabChange,
-}: ChatInputProps) => {
-  // State to track client-side mounting
+}: ChatInputProps) => {  // State to track client-side mounting
   const [mounted, setMounted] = useState(false);
   
   // Get theme using next-themes
@@ -84,14 +83,66 @@ const ChatInput = ({
   // Only determine theme on the client side after mounting
   const isDarkMode = mounted && (currentTheme === 'dark' || resolvedTheme === 'dark');
   
+  // State for dropdown visibility - moved before useEffect hooks that reference them
+  const [showDenominationDropdown, setShowDenominationDropdown] = useState(false);
+  const [showServiceTypeDropdown, setShowServiceTypeDropdown] = useState(false);
+  
+  // References for dropdown containers to detect clicks outside
+  const denominationDropdownRef = React.useRef<HTMLDivElement>(null);
+  const serviceTypeDropdownRef = React.useRef<HTMLDivElement>(null);
+  
   // Track when component is mounted on client
   useEffect(() => {
     setMounted(true);
   }, []);
   
-  // State for dropdown visibility
-  const [showDenominationDropdown, setShowDenominationDropdown] = useState(false);
-  const [showServiceTypeDropdown, setShowServiceTypeDropdown] = useState(false);
+  // Handle click outside to close dropdowns and reposition dropdowns on scroll/resize
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Skip if not mounted yet
+      if (!mounted) return;
+      
+      // Close denomination dropdown if clicked outside
+      if (
+        denominationDropdownRef.current && 
+        showDenominationDropdown &&
+        !denominationDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDenominationDropdown(false);
+      }
+      
+      // Close service type dropdown if clicked outside
+      if (
+        serviceTypeDropdownRef.current && 
+        showServiceTypeDropdown &&
+        !serviceTypeDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowServiceTypeDropdown(false);
+      }
+    };
+    
+    // Handle window resize and scroll for dropdown positioning
+    const handleWindowEvents = () => {
+      // Force re-render dropdowns if they're open
+      if (showDenominationDropdown || showServiceTypeDropdown) {
+        // This causes React to re-render with updated positions
+        setShowDenominationDropdown(showDenominationDropdown);
+        setShowServiceTypeDropdown(showServiceTypeDropdown);
+      }
+    };
+
+    // Add event listeners
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('resize', handleWindowEvents);
+    window.addEventListener('scroll', handleWindowEvents, true);
+    
+    // Clean up
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleWindowEvents);
+      window.removeEventListener('scroll', handleWindowEvents, true);
+    };
+  }, [mounted, showDenominationDropdown, showServiceTypeDropdown]);
   
   // Handler for suggestion selection
   const handleSelectSuggestion = (suggestion: string) => {
@@ -209,57 +260,66 @@ const ChatInput = ({
         <div className="flex flex-col">
           {/* Top row with dropdowns */}
           {showOptionsBar && (
-            <div className="flex items-center px-4 pt-3 pb-2">
-              {/* Denomination Dropdown */}
-              <div className="relative mr-2">
+            <div className="flex items-center px-4 pt-3 pb-2">              {/* Denomination Dropdown */}
+              <div className="relative mr-2" ref={denominationDropdownRef}>
                 <button
                   type="button"
                   className={`bg-transparent border ${themeStyles.border} rounded-md py-1 px-3 ${themeStyles.text} flex items-center justify-between`}
                   onClick={() => setShowDenominationDropdown(!showDenominationDropdown)}
                 >
                   <span className="mr-1">{formatDenomination(denomination)}</span>
-                  <ChevronDown size={16} />
-                </button>
-                
-                {/* Denomination Dropdown Menu */}
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${showDenominationDropdown ? 'transform rotate-180' : ''}`} />
+                </button>                {/* Denomination Dropdown Menu */}
                 {showDenominationDropdown && (
-                  <div className={`absolute z-50 mt-1 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-48 overflow-y-auto`}>
-                    {DENOMINATIONS.map((denom) => (
-                      <button
-                        key={denom}
-                        className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
-                        onClick={() => handleDenominationChange(denom)}
-                      >
-                        {formatDenomination(denom)}
-                      </button>
-                    ))}
+                  <div 
+                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
+                    style={{
+                      top: denominationDropdownRef.current ? denominationDropdownRef.current.getBoundingClientRect().bottom + window.scrollY + 4 : 0,
+                      left: denominationDropdownRef.current ? denominationDropdownRef.current.getBoundingClientRect().left + window.scrollX : 0
+                    }}
+                  >
+                    <div className="py-1">
+                      {DENOMINATIONS.map((denom) => (
+                        <button
+                          key={denom}
+                          className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
+                          onClick={() => handleDenominationChange(denom)}
+                        >
+                          {formatDenomination(denom)}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
-
-              {/* Service Type Dropdown */}
-              <div className="relative">
+              </div>              {/* Service Type Dropdown */}
+              <div className="relative" ref={serviceTypeDropdownRef}>
                 <button
                   type="button"
                   className={`bg-transparent border ${themeStyles.border} rounded-md py-1 px-3 ${themeStyles.text} flex items-center justify-between`}
                   onClick={() => setShowServiceTypeDropdown(!showServiceTypeDropdown)}
                 >
                   <span className="mr-1">{getServiceTypeLabel()}</span>
-                  <ChevronDown size={16} />
-                </button>
-                
-                {/* Service Type Dropdown Menu */}
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${showServiceTypeDropdown ? 'transform rotate-180' : ''}`} />
+                </button>                {/* Service Type Dropdown Menu */}
                 {showServiceTypeDropdown && (
-                  <div className={`absolute z-50 mt-1 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48`}>
-                    {SERVICE_TYPES.map((type) => (
-                      <button
-                        key={type.value}
-                        className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
-                        onClick={() => handleTabChange(type.value)}
-                      >
-                        {type.label}
-                      </button>
-                    ))}
+                  <div 
+                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
+                    style={{
+                      top: serviceTypeDropdownRef.current ? serviceTypeDropdownRef.current.getBoundingClientRect().bottom + window.scrollY + 4 : 0,
+                      left: serviceTypeDropdownRef.current ? serviceTypeDropdownRef.current.getBoundingClientRect().left + window.scrollX : 0
+                    }}
+                  >
+                    <div className="py-1">
+                      {SERVICE_TYPES.map((type) => (
+                        <button
+                          key={type.value}
+                          className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
+                          onClick={() => handleTabChange(type.value)}
+                        >
+                          {type.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

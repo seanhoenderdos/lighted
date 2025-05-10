@@ -3,9 +3,10 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({
+  // Use getToken instead of auth() to avoid using Prisma in Edge runtime
+  const token = await getToken({ 
     req: request,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.AUTH_SECRET
   });
 
   // Public routes accessible even when not authenticated
@@ -15,7 +16,6 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname === route || 
     request.nextUrl.pathname.startsWith("/api/")
   );
-
   // If user is not authenticated and trying to access protected route
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
@@ -35,5 +35,6 @@ export const config = {
      * 4. /favicon.ico, /sitemap.xml (SEO files)
      */
     "/((?!api/auth|_next/static|_next/image|fonts|images|icons|favicon.ico|sitemap.xml).*)",
-  ],
+  ],  // Specify that this middleware runs in the Edge Runtime
+  runtime: 'experimental-edge',
 };

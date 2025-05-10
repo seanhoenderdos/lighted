@@ -1,7 +1,8 @@
 'use server';
 
-import { signOut } from 'next-auth/react';
+import { signOut as authSignOut } from '@/auth';
 
 export async function signOutAction() {
-  await signOut({ redirect: false });
+  await authSignOut();
+  return { success: true };
 }

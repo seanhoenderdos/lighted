@@ -114,13 +114,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
-  },
-  session: {
+  },  session: {
     strategy: "jwt"
   },
-  secret:
-    process.env.NEXTAUTH_SECRET ??
-    (process.env.NODE_ENV === "production"
-      ? (() => { throw new Error("NEXTAUTH_SECRET must be set in production"); })()
-      : "dev-secret"),
+  secret: process.env.AUTH_SECRET,
+  jwt: {
+    secret: process.env.AUTH_SECRET,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
 });
