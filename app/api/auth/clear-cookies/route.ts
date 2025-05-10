@@ -3,14 +3,15 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   // Get all cookies
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   
   // Delete all auth-related cookies
-  cookieStore.getAll().forEach(cookie => {
+  const allCookies = await cookieStore.getAll();
+  for (const cookie of allCookies) {
     if (cookie.name.includes('next-auth') || cookie.name.includes('__Secure-next-auth')) {
-      cookieStore.delete(cookie.name);
+      await cookieStore.delete(cookie.name);
     }
-  });
+  }
   
   return NextResponse.json({ 
     success: true, 
