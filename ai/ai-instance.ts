@@ -1,5 +1,6 @@
 import MODEL from '@/constants/models';
 import { InferenceClient } from '@huggingface/inference';
+import { fetchWithRetry, getCompatibleModel } from '@/lib/api-helpers';
 
 // Initialize Hugging Face client
 const hfClient = new InferenceClient(process.env.HUGGING_FACE_API_KEY);
@@ -29,49 +30,48 @@ export async function generateSermonFromInput(input: {
     medium: 1024,
     long: 1800
   }[sermonLength];
-
   try {
-    // Try GROQ first
-    const groqResponse = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: groqHeaders,
-      body: JSON.stringify({
-        model: MODEL.CURRENT,
-        messages: [
-          {
-            role: "system",
-            content: `You are a knowledgeable theological assistant helping to create sermons.
-            You have expertise in various Christian denominations including ${denomination}.
-            Create content appropriate for ${audience} audiences.
-            Structure sermons with clear headings using markdown format:
-            **Title:**
-            **Scripture:**
-            **Introduction:**
-            **Main Points:**
-            **Illustrations:**
-            **Application:**
-            **Conclusion:**`
-          },
-          {
-            role: "user",
-            content: `Please help create a sermon with these details:
-            Topic: ${topic}
-            Denomination: ${denomination}
-            Bible Verses: ${versesText}
-            Target Audience: ${audience}
-            
-            Generate a well-structured sermon that explains the topic, incorporates the Bible verses naturally, and follows the theological perspective of the specified denomination.`
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: targetLength,
-        top_p: 0.95
-      })
-    });
-
-    if (!groqResponse.ok) {
-      throw new Error(`GROQ API error: ${groqResponse.statusText}`);
-    }
+    // Try GROQ first with retry logic
+    const groqResponse = await fetchWithRetry(
+      GROQ_API_URL,
+      {
+        method: 'POST',
+        headers: groqHeaders,
+        body: JSON.stringify({
+          model: MODEL.CURRENT,
+          messages: [
+            {
+              role: "system",
+              content: `You are a knowledgeable theological assistant helping to create sermons.
+              You have expertise in various Christian denominations including ${denomination}.
+              Create content appropriate for ${audience} audiences.
+              Structure sermons with clear headings using markdown format:
+              **Title:**
+              **Scripture:**
+              **Introduction:**
+              **Main Points:**
+              **Illustrations:**
+              **Application:**
+              **Conclusion:**`
+            },
+            {
+              role: "user",
+              content: `Please help create a sermon with these details:
+              Topic: ${topic}
+              Denomination: ${denomination}
+              Bible Verses: ${versesText}
+              Target Audience: ${audience}
+              
+              Generate a well-structured sermon that explains the topic, incorporates the Bible verses naturally, and follows the theological perspective of the specified denomination.`
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: targetLength,
+          top_p: 0.95
+        })
+      },
+      3 // 3 retries
+    );
 
     const groqData = await groqResponse.json();
     return { sermonDraft: groqData.choices[0]?.message?.content || 'No sermon generated' };
@@ -79,10 +79,12 @@ export async function generateSermonFromInput(input: {
     console.error('GROQ API error:', error);
     
     // Fallback to Hugging Face if GROQ fails
-    try {
+    try {      // Use a compatible model instead of Mixtral
+      const compatibleModel = getCompatibleModel('text-generation', 'mistralai/Mixtral-8x7B-Instruct-v0.1');
+      
       const response = await hfClient.textGeneration({
-        model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        inputs: `<s>[INST] You are a knowledgeable theological assistant. Please help create a sermon with these details:
+        model: compatibleModel,
+        inputs: `You are a knowledgeable theological assistant. Please help create a sermon with these details:
 
 Topic: ${topic}
 Denomination: ${denomination}
@@ -98,7 +100,7 @@ Structure sermons with clear headings using markdown format:
 **Application:**
 **Conclusion:**
 
-Generate a well-structured sermon that explains the topic, incorporates the Bible verses naturally, and follows the theological perspective of the specified denomination. [/INST]</s>`,
+Generate a well-structured sermon that explains the topic, incorporates the Bible verses naturally, and follows the theological perspective of the specified denomination.`,
         parameters: {
           max_new_tokens: targetLength,
           temperature: 0.7,
@@ -119,34 +121,33 @@ Generate a well-structured sermon that explains the topic, incorporates the Bibl
 /**
  * Generate exegetical analysis of a Bible passage
  */
-export async function generateExegesis(passage: string, denomination: string): Promise<{ exegesis: string }> {
-  try {
-    const groqResponse = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: groqHeaders,
-      body: JSON.stringify({
-        model: MODEL.CURRENT,
-        messages: [
-          {
-            role: "system",
-            content: `You are a biblical scholar providing exegetical analysis of Scripture.
-            Consider the ${denomination} tradition in your analysis.
-            Structure your analysis with: Historical Context, Word Studies, Literary Context, Theological Significance, and Application.`
-          },
-          {
-            role: "user",
-            content: `Provide an exegetical analysis of ${passage}. Include historical context, key word studies (including original languages where relevant), and theological significance.`
-          }
-        ],
-        temperature: 0.3, // Lower temperature for factual content
-        max_tokens: 1200,
-        top_p: 0.9
-      })
-    });
-
-    if (!groqResponse.ok) {
-      throw new Error(`GROQ API error: ${groqResponse.statusText}`);
-    }
+export async function generateExegesis(passage: string, denomination: string): Promise<{ exegesis: string }> {  try {
+    const groqResponse = await fetchWithRetry(
+      GROQ_API_URL,
+      {
+        method: 'POST',
+        headers: groqHeaders,
+        body: JSON.stringify({
+          model: MODEL.CURRENT,
+          messages: [
+            {
+              role: "system",
+              content: `You are a biblical scholar providing exegetical analysis of Scripture.
+              Consider the ${denomination} tradition in your analysis.
+              Structure your analysis with: Historical Context, Word Studies, Literary Context, Theological Significance, and Application.`
+            },
+            {
+              role: "user",
+              content: `Provide an exegetical analysis of ${passage}. Include historical context, key word studies (including original languages where relevant), and theological significance.`
+            }
+          ],
+          temperature: 0.3, // Lower temperature for factual content
+          max_tokens: 1200,
+          top_p: 0.9
+        })
+      },
+      3 // 3 retries
+    );
 
     const groqData = await groqResponse.json();
     return { exegesis: groqData.choices[0]?.message?.content || 'No exegesis generated' };
@@ -154,12 +155,14 @@ export async function generateExegesis(passage: string, denomination: string): P
     console.error('GROQ API error:', error);
     
     // Fallback to Hugging Face
-    try {
+    try {      // Use a compatible model instead of Mixtral
+      const compatibleModel = getCompatibleModel('text-generation', 'mistralai/Mixtral-8x7B-Instruct-v0.1');
+      
       const response = await hfClient.textGeneration({
-        model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        inputs: `<s>[INST] You are a biblical scholar. Provide an exegetical analysis of ${passage}.
+        model: compatibleModel,
+        inputs: `You are a biblical scholar. Provide an exegetical analysis of ${passage}.
         Consider the ${denomination} tradition in your analysis.
-        Include historical context, key word studies (including original languages where relevant), literary context, theological significance, and application. [/INST]</s>`,
+        Include historical context, key word studies (including original languages where relevant), literary context, theological significance, and application.`,
         parameters: {
           max_new_tokens: 1200,
           temperature: 0.3,
@@ -180,34 +183,33 @@ export async function generateExegesis(passage: string, denomination: string): P
 /**
  * Generate pastoral counseling guidance
  */
-export async function generateCounselingGuidance(situation: string, denomination: string): Promise<{ guidance: string }> {
-  try {
-    const groqResponse = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: groqHeaders,
-      body: JSON.stringify({
-        model: MODEL.CURRENT,
-        messages: [
-          {
-            role: "system",
-            content: `You are a pastoral counseling assistant. Provide biblically-based guidance for pastoral counseling situations.
-            Consider ${denomination} perspectives.
-            Always include: 1) Key scriptures, 2) Conversation starters, 3) Practical steps, 4) When to refer to professional help`
-          },
-          {
-            role: "user",
-            content: `Provide pastoral counseling guidance for this situation: ${situation}`
-          }
-        ],
-        temperature: 0.5,
-        max_tokens: 800,
-        top_p: 0.9
-      })
-    });
-
-    if (!groqResponse.ok) {
-      throw new Error(`GROQ API error: ${groqResponse.statusText}`);
-    }
+export async function generateCounselingGuidance(situation: string, denomination: string): Promise<{ guidance: string }> {  try {
+    const groqResponse = await fetchWithRetry(
+      GROQ_API_URL,
+      {
+        method: 'POST',
+        headers: groqHeaders,
+        body: JSON.stringify({
+          model: MODEL.CURRENT,
+          messages: [
+            {
+              role: "system",
+              content: `You are a pastoral counseling assistant. Provide biblically-based guidance for pastoral counseling situations.
+              Consider ${denomination} perspectives.
+              Always include: 1) Key scriptures, 2) Conversation starters, 3) Practical steps, 4) When to refer to professional help`
+            },
+            {
+              role: "user",
+              content: `Provide pastoral counseling guidance for this situation: ${situation}`
+            }
+          ],
+          temperature: 0.5,
+          max_tokens: 800,
+          top_p: 0.9
+        })
+      },
+      3 // 3 retries
+    );
 
     const groqData = await groqResponse.json();
     return { guidance: groqData.choices[0]?.message?.content || 'No guidance generated' };
@@ -215,12 +217,14 @@ export async function generateCounselingGuidance(situation: string, denomination
     console.error('GROQ API error:', error);
     
     // Fallback to Hugging Face
-    try {
+    try {      // Use a compatible model instead of Mixtral
+      const compatibleModel = getCompatibleModel('text-generation', 'mistralai/Mixtral-8x7B-Instruct-v0.1');
+      
       const response = await hfClient.textGeneration({
-        model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        inputs: `<s>[INST] You are a pastoral counseling assistant. Provide biblically-based guidance for this situation: ${situation}
+        model: compatibleModel,
+        inputs: `You are a pastoral counseling assistant. Provide biblically-based guidance for this situation: ${situation}
         Consider ${denomination} perspectives.
-        Include: 1) Key scriptures, 2) Conversation starters, 3) Practical steps, 4) When to refer to professional help [/INST]</s>`,
+        Include: 1) Key scriptures, 2) Conversation starters, 3) Practical steps, 4) When to refer to professional help`,
         parameters: {
           max_new_tokens: 800,
           temperature: 0.5,
@@ -268,33 +272,32 @@ export async function generatePastorSuggestions(
       or "What ${denomination} resources can I offer to someone struggling with grief?".
       Make them diverse, covering different counseling situations including grief, family issues, faith doubts, and life transitions.`;
     }
-    
-    // Try GROQ first
-    const groqResponse = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: groqHeaders,
-      body: JSON.stringify({
-        model: MODEL.CURRENT,
-        messages: [
-          {
-            role: "system",
-            content: `You are a theological assistant helping ${denomination} pastors with their daily ministry work.`
-          },
-          {
-            role: "user",
-            content: `${promptContent}
-            Respond with a JSON array of strings only, with no additional text.`
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 500,
-        top_p: 0.95
-      })
-    });
-
-    if (!groqResponse.ok) {
-      throw new Error(`GROQ API error: ${groqResponse.statusText}`);
-    }
+      // Try GROQ first with retry logic
+    const groqResponse = await fetchWithRetry(
+      GROQ_API_URL,
+      {
+        method: 'POST',
+        headers: groqHeaders,
+        body: JSON.stringify({
+          model: MODEL.CURRENT,
+          messages: [
+            {
+              role: "system",
+              content: `You are a theological assistant helping ${denomination} pastors with their daily ministry work.`
+            },
+            {
+              role: "user",
+              content: `${promptContent}
+              Respond with a JSON array of strings only, with no additional text.`
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500,
+          top_p: 0.95
+        })
+      },
+      3 // 3 retries
+    );
 
     const groqData = await groqResponse.json();
     const content = groqData.choices[0]?.message?.content || '[]';
@@ -359,8 +362,7 @@ export async function generatePastorSuggestions(
     } catch (parseError) {
       console.error('Error in JSON parsing wrapper:', parseError);
       return getDefaultSuggestions(denomination, activeTab);
-    }
-  } catch (error) {
+    }  } catch (error) {
     console.error('Error generating suggestions:', error);
     
     // Fallback to Hugging Face if GROQ fails
@@ -378,11 +380,12 @@ export async function generatePastorSuggestions(
         hfPrompt = `Generate 7 pastoral counseling scenarios for a ${denomination} pastor.
         These should be phrased as requests for guidance in counseling situations.`;
       }
+      // Use getCompatibleModel to select a model that supports text-generation
+      const compatibleModel = getCompatibleModel('text-generation', 'mistralai/Mixtral-8x7B-Instruct-v0.1'); 
       
       const response = await hfClient.textGeneration({
-        model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-        inputs: `<s>[INST] ${hfPrompt}
-        Respond with a JSON array of strings only. [/INST]</s>`,
+        model: compatibleModel,
+        inputs: `${hfPrompt} Respond with a JSON array of strings only.`,
         parameters: {
           max_new_tokens: 500,
           temperature: 0.7,
@@ -390,13 +393,11 @@ export async function generatePastorSuggestions(
           do_sample: true
         }
       });
-      
-      // Completely rewritten approach to avoid TypeScript errors
+        // Completely rewritten approach to avoid TypeScript errors
       let suggestions: string[] = [];
-      
-      try {
+        try {
         // First, try to extract a JSON array using a regex
-        const responseText: string = response.generated_text;
+        const responseText: string = response.generated_text || '';
         const jsonArrayRegex = /\[[\s\S]*?\]/;
         const matches = responseText.match(jsonArrayRegex);
         
@@ -486,9 +487,12 @@ function getDefaultSuggestions(
  */
 export async function detectBibleReferences(text: string): Promise<Array<{ reference: string; context?: string }>> {
   try {
+    // Use a model that supports text generation
+    const compatibleModel = getCompatibleModel('text-generation', 'mistralai/Mixtral-8x7B-Instruct-v0.1');
+    
     const response = await hfClient.textGeneration({
-      model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-      inputs: `<s>[INST] Given the following text, identify all Bible references (e.g., "John 3:16", "Romans 8:28-30", "1 Corinthians 13") that appear in it. For each reference, extract a small amount of surrounding context.
+      model: compatibleModel,
+      inputs: `Given the following text, identify all Bible references (e.g., "John 3:16", "Romans 8:28-30", "1 Corinthians 13") that appear in it. For each reference, extract a small amount of surrounding context.
       
       Text: ${text}
       
@@ -496,7 +500,7 @@ export async function detectBibleReferences(text: string): Promise<Array<{ refer
       Example:
       [{"reference":"John 3:16","context":"For God so loved the world that he gave..."},{"reference":"Romans 8:28","context":"And we know that in all things God works..."}]
       
-      If no Bible references are found, return an empty array: [] [/INST]</s>`,
+      If no Bible references are found, return an empty array: []`,
       parameters: {
         max_new_tokens: 800,
         temperature: 0.1,
@@ -504,10 +508,10 @@ export async function detectBibleReferences(text: string): Promise<Array<{ refer
         do_sample: true
       }
     });
-    
-    try {
+      try {
       // Extract JSON array from response
-      const jsonMatch = response.generated_text.match(/\[\s*\{.*\}\s*\]/s);
+      const responseText = response.generated_text || '';
+      const jsonMatch = responseText.match(/\[\s*\{.*\}\s*\]/s);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0] as string);
       }
