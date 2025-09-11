@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import ChatSuggestions from './ChatSuggestions';
 import { ChevronDown } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Denomination options for pastor context
 const DENOMINATIONS = [
@@ -74,8 +75,12 @@ const ChatInput = ({
   onDenominationChange,
   activeTab = 'sermon',
   onTabChange,
-}: ChatInputProps) => {  // State to track client-side mounting
+}: ChatInputProps) => {
+  // State to track client-side mounting
   const [mounted, setMounted] = useState(false);
+  
+  // Get mobile state
+  const isMobile = useIsMobile();
   
   // Get theme using next-themes
   const { theme: currentTheme, resolvedTheme } = useTheme();
@@ -239,6 +244,30 @@ const ChatInput = ({
     }
   };
 
+  // Calculate dropdown position based on mobile state
+  const getDropdownPosition = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (!ref.current) return { top: 0, left: 0 };
+    
+    const rect = ref.current.getBoundingClientRect();
+    const left = rect.left + window.scrollX;
+    
+    // On mobile, position dropdown above the trigger button
+    if (isMobile) {
+      // Position dropdown above the button with a small gap
+      // Use transform to position from bottom of dropdown to avoid calculating height
+      const top = rect.top + window.scrollY - 8; // 8px gap above the button
+      return { 
+        top, 
+        left,
+        transform: 'translateY(-100%)' // This moves the dropdown up by its own height
+      };
+    }
+    
+    // On desktop, position dropdown below the trigger button (original behavior)
+    const top = rect.bottom + window.scrollY + 4; // 4px gap below
+    return { top, left };
+  };
+
   const themeStyles = getThemeStyles();
   
   return (
@@ -273,10 +302,7 @@ const ChatInput = ({
                 {showDenominationDropdown && (
                   <div 
                     className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
-                    style={{
-                      top: denominationDropdownRef.current ? denominationDropdownRef.current.getBoundingClientRect().bottom + window.scrollY + 4 : 0,
-                      left: denominationDropdownRef.current ? denominationDropdownRef.current.getBoundingClientRect().left + window.scrollX : 0
-                    }}
+                    style={getDropdownPosition(denominationDropdownRef)}
                   >
                     <div className="py-1">
                       {DENOMINATIONS.map((denom) => (
@@ -304,10 +330,7 @@ const ChatInput = ({
                 {showServiceTypeDropdown && (
                   <div 
                     className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
-                    style={{
-                      top: serviceTypeDropdownRef.current ? serviceTypeDropdownRef.current.getBoundingClientRect().bottom + window.scrollY + 4 : 0,
-                      left: serviceTypeDropdownRef.current ? serviceTypeDropdownRef.current.getBoundingClientRect().left + window.scrollX : 0
-                    }}
+                    style={getDropdownPosition(serviceTypeDropdownRef)}
                   >
                     <div className="py-1">
                       {SERVICE_TYPES.map((type) => (

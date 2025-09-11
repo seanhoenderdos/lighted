@@ -1,5 +1,5 @@
 const MODEL = {
-    CURRENT: 'llama3-8b-8192',
+    CURRENT: 'llama-3.1-8b-instant',
 };
 
 export default MODEL;
