@@ -211,37 +211,26 @@ const ChatInput = ({
     if (!mounted) {
       return {
         bg: 'bg-white',
-        border: 'border-gray-300',
+        border: 'border-slate-200',
         inputBg: 'bg-transparent',
-        text: 'text-gray-900',
-        placeholder: 'placeholder-gray-500',
+        text: 'text-slate-900',
+        placeholder: 'placeholder-slate-400',
         dropdownBg: 'bg-white',
-        dropdownHover: 'hover:bg-gray-100'
+        dropdownHover: 'hover:bg-slate-50'
       };
     }
     
     // Once mounted, we can safely use the detected theme
-    if (isDarkMode) {
-      return {
-        bg: 'bg-[#0E1A2B]',
-        border: 'border-[#3D4E61]',
-        inputBg: 'bg-transparent',
-        text: 'text-white',
-        placeholder: 'placeholder-gray-400',
-        dropdownBg: 'bg-[#1A2B40]',
-        dropdownHover: 'hover:bg-[#2A3B50]'
-      };
-    } else {
-      return {
-        bg: 'bg-white',
-        border: 'border-gray-300',
-        inputBg: 'bg-transparent',
-        text: 'text-gray-900',
-        placeholder: 'placeholder-gray-500',
-        dropdownBg: 'bg-white',
-        dropdownHover: 'hover:bg-gray-100'
-      };
-    }
+    // Updated to use CSS variables via Tailwind classes for modern look
+    return {
+      bg: 'bg-card/80 backdrop-blur-md',
+      border: 'border-border/50',
+      inputBg: 'bg-transparent',
+      text: 'text-foreground',
+      placeholder: 'placeholder-muted-foreground',
+      dropdownBg: 'bg-popover/90 backdrop-blur-sm',
+      dropdownHover: 'hover:bg-accent hover:text-accent-foreground'
+    };
   };
 
   // Calculate dropdown position based on mobile state
@@ -284,7 +273,7 @@ const ChatInput = ({
       )}
     
       {/* Chat Input with dropdown options and send button */}
-      <div className={`rounded-xl ${themeStyles.bg} border ${themeStyles.border} shadow-lg`}>
+      <div className={`rounded-xl ${themeStyles.bg} border ${themeStyles.border} shadow-lg shadow-black/5`}>
         {/* Main input area with dropdowns */}
         <div className="flex flex-col">
           {/* Top row with dropdowns */}
@@ -293,22 +282,22 @@ const ChatInput = ({
               <div className="relative mr-2" ref={denominationDropdownRef}>
                 <button
                   type="button"
-                  className={`bg-transparent border ${themeStyles.border} rounded-md py-1 px-3 ${themeStyles.text} flex items-center justify-between`}
+                  className={`bg-transparent border ${themeStyles.border} rounded-md py-1.5 px-3 text-sm font-medium ${themeStyles.text} hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between`}
                   onClick={() => setShowDenominationDropdown(!showDenominationDropdown)}
                 >
                   <span className="mr-1">{formatDenomination(denomination)}</span>
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${showDenominationDropdown ? 'transform rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`transition-transform duration-200 text-muted-foreground ${showDenominationDropdown ? 'transform rotate-180' : ''}`} />
                 </button>                {/* Denomination Dropdown Menu */}
                 {showDenominationDropdown && (
                   <div 
-                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
+                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-lg shadow-xl w-48 max-h-72 overflow-y-auto p-1`}
                     style={getDropdownPosition(denominationDropdownRef)}
                   >
                     <div className="py-1">
                       {DENOMINATIONS.map((denom) => (
                         <button
                           key={denom}
-                          className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
+                          className={`block w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${themeStyles.text} ${themeStyles.dropdownHover}`}
                           onClick={() => handleDenominationChange(denom)}
                         >
                           {formatDenomination(denom)}
@@ -321,22 +310,22 @@ const ChatInput = ({
               <div className="relative" ref={serviceTypeDropdownRef}>
                 <button
                   type="button"
-                  className={`bg-transparent border ${themeStyles.border} rounded-md py-1 px-3 ${themeStyles.text} flex items-center justify-between`}
+                  className={`bg-transparent border ${themeStyles.border} rounded-md py-1.5 px-3 text-sm font-medium ${themeStyles.text} hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between`}
                   onClick={() => setShowServiceTypeDropdown(!showServiceTypeDropdown)}
                 >
                   <span className="mr-1">{getServiceTypeLabel()}</span>
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${showServiceTypeDropdown ? 'transform rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`transition-transform duration-200 text-muted-foreground ${showServiceTypeDropdown ? 'transform rotate-180' : ''}`} />
                 </button>                {/* Service Type Dropdown Menu */}
                 {showServiceTypeDropdown && (
                   <div 
-                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-md shadow-lg w-48 max-h-72 overflow-y-auto`}
+                    className={`fixed z-50 ${themeStyles.dropdownBg} border ${themeStyles.border} rounded-lg shadow-xl w-48 max-h-72 overflow-y-auto p-1`}
                     style={getDropdownPosition(serviceTypeDropdownRef)}
                   >
                     <div className="py-1">
                       {SERVICE_TYPES.map((type) => (
                         <button
                           key={type.value}
-                          className={`block w-full text-left px-4 py-2 ${themeStyles.text} ${themeStyles.dropdownHover}`}
+                          className={`block w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${themeStyles.text} ${themeStyles.dropdownHover}`}
                           onClick={() => handleTabChange(type.value)}
                         >
                           {type.label}
@@ -356,13 +345,13 @@ const ChatInput = ({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={getPlaceholderByTab()}
-              className={`w-full p-4 pr-14 ${themeStyles.inputBg} ${themeStyles.text} ${themeStyles.placeholder} focus:outline-none rounded-b-xl`}
+              className={`w-full p-4 pr-14 ${themeStyles.inputBg} ${themeStyles.text} ${themeStyles.placeholder} focus:outline-none rounded-b-xl text-base`}
               disabled={isLoading}
               autoFocus={autoFocus}
             />
             <button 
               type="submit" 
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-800 disabled:opacity-50"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               disabled={isLoading || !input.trim()}
               aria-label="Send message"
             >
@@ -389,8 +378,8 @@ const ChatInput = ({
       
       {/* Disclaimer message */}
       {showDisclaimer && (
-        <div className={`text-center mt-2 ${mounted ? (isDarkMode ? 'text-[#A0AEC0]' : 'text-gray-500') : 'text-gray-500'} text-xs pb-3`}>
-          Lighted can make mistakes. Please check important info.
+        <div className={`text-center mt-3 ${mounted ? (isDarkMode ? 'text-muted-foreground' : 'text-muted-foreground') : 'text-muted-foreground'} text-xs font-medium`}>
+          LightEd can make mistakes. Please check important info.
         </div>
       )}
     </div>
