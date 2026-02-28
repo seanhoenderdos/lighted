@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   });
 
   // Public routes accessible even when not authenticated
-  const publicRoutes = ["/", "/sign-in", "/sign-up", "/university"];
+  const publicRoutes = ["/sign-in", "/sign-up", "/reset-password"];
   
   const isPublicRoute = publicRoutes.some(route => 
     request.nextUrl.pathname === route || 

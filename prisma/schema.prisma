@@ -54,9 +54,11 @@ model User {
   denomination       String?
   church             String?
   location           String?
+  telegramChatId     String?              @unique // Link Telegram to user account
   accounts           Account[]
   sessions           Session[]
   chats              Chat[]
+  briefs             Brief[]
   passwordResetToken PasswordResetToken[]
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
@@ -110,4 +112,38 @@ model Waitlist {
   email     String   @unique
   type      String   // 'pastor' or 'student'
   createdAt DateTime @default(now())
+}
+
+// Exegesis Brief Model (Voice-to-Exegesis workflow)
+model Brief {
+  id                 String   @id @default(cuid())
+  title              String
+  description        String?  @db.Text
+  status             String   @default("in-progress") // 'draft', 'in-progress', 'completed'
+  category           String   @default("new-testament") // 'old-testament', 'new-testament', 'topical'
+  
+  // Content sections
+  originalTranscript String?  @db.Text
+  greekInsights      Json?    // Array of { term, meaning, context }
+  historicalContext  String?  @db.Text
+  outlinePoints      Json?    // Array of { title, content }
+  
+  // Metadata from Telegram
+  telegramMessageId  String?  @unique
+  telegramChatId     String?
+  audioFileId        String?
+  audioDuration      Int?     // Duration in seconds
+  
+  // Relationships
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  readTime           Int?     // Estimated read time in minutes
+  isBookmarked       Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userId])
+  @@index([telegramChatId])
 }

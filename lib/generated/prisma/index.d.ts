@@ -53,6 +53,11 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  * 
  */
 export type Waitlist = $Result.DefaultSelection<Prisma.$WaitlistPayload>
+/**
+ * Model Brief
+ * 
+ */
+export type Brief = $Result.DefaultSelection<Prisma.$BriefPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -258,6 +263,16 @@ export class PrismaClient<
     * ```
     */
   get waitlist(): Prisma.WaitlistDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.brief`: Exposes CRUD operations for the **Brief** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Briefs
+    * const briefs = await prisma.brief.findMany()
+    * ```
+    */
+  get brief(): Prisma.BriefDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -705,7 +720,8 @@ export namespace Prisma {
     PasswordResetToken: 'PasswordResetToken',
     Chat: 'Chat',
     Message: 'Message',
-    Waitlist: 'Waitlist'
+    Waitlist: 'Waitlist',
+    Brief: 'Brief'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -724,7 +740,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "user" | "verificationToken" | "passwordResetToken" | "chat" | "message" | "waitlist"
+      modelProps: "account" | "session" | "user" | "verificationToken" | "passwordResetToken" | "chat" | "message" | "waitlist" | "brief"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1320,6 +1336,80 @@ export namespace Prisma {
           }
         }
       }
+      Brief: {
+        payload: Prisma.$BriefPayload<ExtArgs>
+        fields: Prisma.BriefFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BriefFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BriefFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          findFirst: {
+            args: Prisma.BriefFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BriefFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          findMany: {
+            args: Prisma.BriefFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>[]
+          }
+          create: {
+            args: Prisma.BriefCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          createMany: {
+            args: Prisma.BriefCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BriefCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>[]
+          }
+          delete: {
+            args: Prisma.BriefDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          update: {
+            args: Prisma.BriefUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          deleteMany: {
+            args: Prisma.BriefDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BriefUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BriefUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>[]
+          }
+          upsert: {
+            args: Prisma.BriefUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BriefPayload>
+          }
+          aggregate: {
+            args: Prisma.BriefAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBrief>
+          }
+          groupBy: {
+            args: Prisma.BriefGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BriefGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BriefCountArgs<ExtArgs>
+            result: $Utils.Optional<BriefCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1412,6 +1502,7 @@ export namespace Prisma {
     chat?: ChatOmit
     message?: MessageOmit
     waitlist?: WaitlistOmit
+    brief?: BriefOmit
   }
 
   /* Types for Logging */
@@ -1509,6 +1600,7 @@ export namespace Prisma {
     accounts: number
     sessions: number
     chats: number
+    briefs: number
     passwordResetToken: number
   }
 
@@ -1516,6 +1608,7 @@ export namespace Prisma {
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     chats?: boolean | UserCountOutputTypeCountChatsArgs
+    briefs?: boolean | UserCountOutputTypeCountBriefsArgs
     passwordResetToken?: boolean | UserCountOutputTypeCountPasswordResetTokenArgs
   }
 
@@ -1549,6 +1642,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountChatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChatWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBriefsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BriefWhereInput
   }
 
   /**
@@ -3844,6 +3944,7 @@ export namespace Prisma {
     denomination: string | null
     church: string | null
     location: string | null
+    telegramChatId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3860,6 +3961,7 @@ export namespace Prisma {
     denomination: string | null
     church: string | null
     location: string | null
+    telegramChatId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3876,6 +3978,7 @@ export namespace Prisma {
     denomination: number
     church: number
     location: number
+    telegramChatId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3894,6 +3997,7 @@ export namespace Prisma {
     denomination?: true
     church?: true
     location?: true
+    telegramChatId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3910,6 +4014,7 @@ export namespace Prisma {
     denomination?: true
     church?: true
     location?: true
+    telegramChatId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3926,6 +4031,7 @@ export namespace Prisma {
     denomination?: true
     church?: true
     location?: true
+    telegramChatId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4015,6 +4121,7 @@ export namespace Prisma {
     denomination: string | null
     church: string | null
     location: string | null
+    telegramChatId: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4048,11 +4155,13 @@ export namespace Prisma {
     denomination?: boolean
     church?: boolean
     location?: boolean
+    telegramChatId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     chats?: boolean | User$chatsArgs<ExtArgs>
+    briefs?: boolean | User$briefsArgs<ExtArgs>
     passwordResetToken?: boolean | User$passwordResetTokenArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -4069,6 +4178,7 @@ export namespace Prisma {
     denomination?: boolean
     church?: boolean
     location?: boolean
+    telegramChatId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4085,6 +4195,7 @@ export namespace Prisma {
     denomination?: boolean
     church?: boolean
     location?: boolean
+    telegramChatId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4101,15 +4212,17 @@ export namespace Prisma {
     denomination?: boolean
     church?: boolean
     location?: boolean
+    telegramChatId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "emailVerified" | "image" | "password" | "bio" | "denomination" | "church" | "location" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "emailVerified" | "image" | "password" | "bio" | "denomination" | "church" | "location" | "telegramChatId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     chats?: boolean | User$chatsArgs<ExtArgs>
+    briefs?: boolean | User$briefsArgs<ExtArgs>
     passwordResetToken?: boolean | User$passwordResetTokenArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -4122,6 +4235,7 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       chats: Prisma.$ChatPayload<ExtArgs>[]
+      briefs: Prisma.$BriefPayload<ExtArgs>[]
       passwordResetToken: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4136,6 +4250,7 @@ export namespace Prisma {
       denomination: string | null
       church: string | null
       location: string | null
+      telegramChatId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4535,6 +4650,7 @@ export namespace Prisma {
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     chats<T extends User$chatsArgs<ExtArgs> = {}>(args?: Subset<T, User$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    briefs<T extends User$briefsArgs<ExtArgs> = {}>(args?: Subset<T, User$briefsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     passwordResetToken<T extends User$passwordResetTokenArgs<ExtArgs> = {}>(args?: Subset<T, User$passwordResetTokenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4576,6 +4692,7 @@ export namespace Prisma {
     readonly denomination: FieldRef<"User", 'String'>
     readonly church: FieldRef<"User", 'String'>
     readonly location: FieldRef<"User", 'String'>
+    readonly telegramChatId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -5035,6 +5152,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
+  }
+
+  /**
+   * User.briefs
+   */
+  export type User$briefsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    where?: BriefWhereInput
+    orderBy?: BriefOrderByWithRelationInput | BriefOrderByWithRelationInput[]
+    cursor?: BriefWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BriefScalarFieldEnum | BriefScalarFieldEnum[]
   }
 
   /**
@@ -10249,6 +10390,1263 @@ export namespace Prisma {
 
 
   /**
+   * Model Brief
+   */
+
+  export type AggregateBrief = {
+    _count: BriefCountAggregateOutputType | null
+    _avg: BriefAvgAggregateOutputType | null
+    _sum: BriefSumAggregateOutputType | null
+    _min: BriefMinAggregateOutputType | null
+    _max: BriefMaxAggregateOutputType | null
+  }
+
+  export type BriefAvgAggregateOutputType = {
+    audioDuration: number | null
+    readTime: number | null
+  }
+
+  export type BriefSumAggregateOutputType = {
+    audioDuration: number | null
+    readTime: number | null
+  }
+
+  export type BriefMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    status: string | null
+    category: string | null
+    originalTranscript: string | null
+    historicalContext: string | null
+    telegramMessageId: string | null
+    telegramChatId: string | null
+    audioFileId: string | null
+    audioDuration: number | null
+    userId: string | null
+    readTime: number | null
+    isBookmarked: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BriefMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    status: string | null
+    category: string | null
+    originalTranscript: string | null
+    historicalContext: string | null
+    telegramMessageId: string | null
+    telegramChatId: string | null
+    audioFileId: string | null
+    audioDuration: number | null
+    userId: string | null
+    readTime: number | null
+    isBookmarked: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BriefCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    status: number
+    category: number
+    originalTranscript: number
+    greekInsights: number
+    historicalContext: number
+    outlinePoints: number
+    telegramMessageId: number
+    telegramChatId: number
+    audioFileId: number
+    audioDuration: number
+    userId: number
+    readTime: number
+    isBookmarked: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BriefAvgAggregateInputType = {
+    audioDuration?: true
+    readTime?: true
+  }
+
+  export type BriefSumAggregateInputType = {
+    audioDuration?: true
+    readTime?: true
+  }
+
+  export type BriefMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    status?: true
+    category?: true
+    originalTranscript?: true
+    historicalContext?: true
+    telegramMessageId?: true
+    telegramChatId?: true
+    audioFileId?: true
+    audioDuration?: true
+    userId?: true
+    readTime?: true
+    isBookmarked?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BriefMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    status?: true
+    category?: true
+    originalTranscript?: true
+    historicalContext?: true
+    telegramMessageId?: true
+    telegramChatId?: true
+    audioFileId?: true
+    audioDuration?: true
+    userId?: true
+    readTime?: true
+    isBookmarked?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BriefCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    status?: true
+    category?: true
+    originalTranscript?: true
+    greekInsights?: true
+    historicalContext?: true
+    outlinePoints?: true
+    telegramMessageId?: true
+    telegramChatId?: true
+    audioFileId?: true
+    audioDuration?: true
+    userId?: true
+    readTime?: true
+    isBookmarked?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BriefAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Brief to aggregate.
+     */
+    where?: BriefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Briefs to fetch.
+     */
+    orderBy?: BriefOrderByWithRelationInput | BriefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BriefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Briefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Briefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Briefs
+    **/
+    _count?: true | BriefCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BriefAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BriefSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BriefMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BriefMaxAggregateInputType
+  }
+
+  export type GetBriefAggregateType<T extends BriefAggregateArgs> = {
+        [P in keyof T & keyof AggregateBrief]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBrief[P]>
+      : GetScalarType<T[P], AggregateBrief[P]>
+  }
+
+
+
+
+  export type BriefGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BriefWhereInput
+    orderBy?: BriefOrderByWithAggregationInput | BriefOrderByWithAggregationInput[]
+    by: BriefScalarFieldEnum[] | BriefScalarFieldEnum
+    having?: BriefScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BriefCountAggregateInputType | true
+    _avg?: BriefAvgAggregateInputType
+    _sum?: BriefSumAggregateInputType
+    _min?: BriefMinAggregateInputType
+    _max?: BriefMaxAggregateInputType
+  }
+
+  export type BriefGroupByOutputType = {
+    id: string
+    title: string
+    description: string | null
+    status: string
+    category: string
+    originalTranscript: string | null
+    greekInsights: JsonValue | null
+    historicalContext: string | null
+    outlinePoints: JsonValue | null
+    telegramMessageId: string | null
+    telegramChatId: string | null
+    audioFileId: string | null
+    audioDuration: number | null
+    userId: string
+    readTime: number | null
+    isBookmarked: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: BriefCountAggregateOutputType | null
+    _avg: BriefAvgAggregateOutputType | null
+    _sum: BriefSumAggregateOutputType | null
+    _min: BriefMinAggregateOutputType | null
+    _max: BriefMaxAggregateOutputType | null
+  }
+
+  type GetBriefGroupByPayload<T extends BriefGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BriefGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BriefGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BriefGroupByOutputType[P]>
+            : GetScalarType<T[P], BriefGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BriefSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    category?: boolean
+    originalTranscript?: boolean
+    greekInsights?: boolean
+    historicalContext?: boolean
+    outlinePoints?: boolean
+    telegramMessageId?: boolean
+    telegramChatId?: boolean
+    audioFileId?: boolean
+    audioDuration?: boolean
+    userId?: boolean
+    readTime?: boolean
+    isBookmarked?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brief"]>
+
+  export type BriefSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    category?: boolean
+    originalTranscript?: boolean
+    greekInsights?: boolean
+    historicalContext?: boolean
+    outlinePoints?: boolean
+    telegramMessageId?: boolean
+    telegramChatId?: boolean
+    audioFileId?: boolean
+    audioDuration?: boolean
+    userId?: boolean
+    readTime?: boolean
+    isBookmarked?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brief"]>
+
+  export type BriefSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    category?: boolean
+    originalTranscript?: boolean
+    greekInsights?: boolean
+    historicalContext?: boolean
+    outlinePoints?: boolean
+    telegramMessageId?: boolean
+    telegramChatId?: boolean
+    audioFileId?: boolean
+    audioDuration?: boolean
+    userId?: boolean
+    readTime?: boolean
+    isBookmarked?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["brief"]>
+
+  export type BriefSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    category?: boolean
+    originalTranscript?: boolean
+    greekInsights?: boolean
+    historicalContext?: boolean
+    outlinePoints?: boolean
+    telegramMessageId?: boolean
+    telegramChatId?: boolean
+    audioFileId?: boolean
+    audioDuration?: boolean
+    userId?: boolean
+    readTime?: boolean
+    isBookmarked?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BriefOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "category" | "originalTranscript" | "greekInsights" | "historicalContext" | "outlinePoints" | "telegramMessageId" | "telegramChatId" | "audioFileId" | "audioDuration" | "userId" | "readTime" | "isBookmarked" | "createdAt" | "updatedAt", ExtArgs["result"]["brief"]>
+  export type BriefInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BriefIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BriefIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BriefPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Brief"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string | null
+      status: string
+      category: string
+      originalTranscript: string | null
+      greekInsights: Prisma.JsonValue | null
+      historicalContext: string | null
+      outlinePoints: Prisma.JsonValue | null
+      telegramMessageId: string | null
+      telegramChatId: string | null
+      audioFileId: string | null
+      audioDuration: number | null
+      userId: string
+      readTime: number | null
+      isBookmarked: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["brief"]>
+    composites: {}
+  }
+
+  type BriefGetPayload<S extends boolean | null | undefined | BriefDefaultArgs> = $Result.GetResult<Prisma.$BriefPayload, S>
+
+  type BriefCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BriefFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BriefCountAggregateInputType | true
+    }
+
+  export interface BriefDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Brief'], meta: { name: 'Brief' } }
+    /**
+     * Find zero or one Brief that matches the filter.
+     * @param {BriefFindUniqueArgs} args - Arguments to find a Brief
+     * @example
+     * // Get one Brief
+     * const brief = await prisma.brief.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BriefFindUniqueArgs>(args: SelectSubset<T, BriefFindUniqueArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Brief that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BriefFindUniqueOrThrowArgs} args - Arguments to find a Brief
+     * @example
+     * // Get one Brief
+     * const brief = await prisma.brief.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BriefFindUniqueOrThrowArgs>(args: SelectSubset<T, BriefFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brief that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefFindFirstArgs} args - Arguments to find a Brief
+     * @example
+     * // Get one Brief
+     * const brief = await prisma.brief.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BriefFindFirstArgs>(args?: SelectSubset<T, BriefFindFirstArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brief that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefFindFirstOrThrowArgs} args - Arguments to find a Brief
+     * @example
+     * // Get one Brief
+     * const brief = await prisma.brief.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BriefFindFirstOrThrowArgs>(args?: SelectSubset<T, BriefFindFirstOrThrowArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Briefs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Briefs
+     * const briefs = await prisma.brief.findMany()
+     * 
+     * // Get first 10 Briefs
+     * const briefs = await prisma.brief.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const briefWithIdOnly = await prisma.brief.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BriefFindManyArgs>(args?: SelectSubset<T, BriefFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Brief.
+     * @param {BriefCreateArgs} args - Arguments to create a Brief.
+     * @example
+     * // Create one Brief
+     * const Brief = await prisma.brief.create({
+     *   data: {
+     *     // ... data to create a Brief
+     *   }
+     * })
+     * 
+     */
+    create<T extends BriefCreateArgs>(args: SelectSubset<T, BriefCreateArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Briefs.
+     * @param {BriefCreateManyArgs} args - Arguments to create many Briefs.
+     * @example
+     * // Create many Briefs
+     * const brief = await prisma.brief.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BriefCreateManyArgs>(args?: SelectSubset<T, BriefCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Briefs and returns the data saved in the database.
+     * @param {BriefCreateManyAndReturnArgs} args - Arguments to create many Briefs.
+     * @example
+     * // Create many Briefs
+     * const brief = await prisma.brief.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Briefs and only return the `id`
+     * const briefWithIdOnly = await prisma.brief.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BriefCreateManyAndReturnArgs>(args?: SelectSubset<T, BriefCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Brief.
+     * @param {BriefDeleteArgs} args - Arguments to delete one Brief.
+     * @example
+     * // Delete one Brief
+     * const Brief = await prisma.brief.delete({
+     *   where: {
+     *     // ... filter to delete one Brief
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BriefDeleteArgs>(args: SelectSubset<T, BriefDeleteArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Brief.
+     * @param {BriefUpdateArgs} args - Arguments to update one Brief.
+     * @example
+     * // Update one Brief
+     * const brief = await prisma.brief.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BriefUpdateArgs>(args: SelectSubset<T, BriefUpdateArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Briefs.
+     * @param {BriefDeleteManyArgs} args - Arguments to filter Briefs to delete.
+     * @example
+     * // Delete a few Briefs
+     * const { count } = await prisma.brief.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BriefDeleteManyArgs>(args?: SelectSubset<T, BriefDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Briefs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Briefs
+     * const brief = await prisma.brief.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BriefUpdateManyArgs>(args: SelectSubset<T, BriefUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Briefs and returns the data updated in the database.
+     * @param {BriefUpdateManyAndReturnArgs} args - Arguments to update many Briefs.
+     * @example
+     * // Update many Briefs
+     * const brief = await prisma.brief.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Briefs and only return the `id`
+     * const briefWithIdOnly = await prisma.brief.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BriefUpdateManyAndReturnArgs>(args: SelectSubset<T, BriefUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Brief.
+     * @param {BriefUpsertArgs} args - Arguments to update or create a Brief.
+     * @example
+     * // Update or create a Brief
+     * const brief = await prisma.brief.upsert({
+     *   create: {
+     *     // ... data to create a Brief
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Brief we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BriefUpsertArgs>(args: SelectSubset<T, BriefUpsertArgs<ExtArgs>>): Prisma__BriefClient<$Result.GetResult<Prisma.$BriefPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Briefs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefCountArgs} args - Arguments to filter Briefs to count.
+     * @example
+     * // Count the number of Briefs
+     * const count = await prisma.brief.count({
+     *   where: {
+     *     // ... the filter for the Briefs we want to count
+     *   }
+     * })
+    **/
+    count<T extends BriefCountArgs>(
+      args?: Subset<T, BriefCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BriefCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Brief.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BriefAggregateArgs>(args: Subset<T, BriefAggregateArgs>): Prisma.PrismaPromise<GetBriefAggregateType<T>>
+
+    /**
+     * Group by Brief.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BriefGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BriefGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BriefGroupByArgs['orderBy'] }
+        : { orderBy?: BriefGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BriefGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBriefGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Brief model
+   */
+  readonly fields: BriefFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Brief.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BriefClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Brief model
+   */
+  interface BriefFieldRefs {
+    readonly id: FieldRef<"Brief", 'String'>
+    readonly title: FieldRef<"Brief", 'String'>
+    readonly description: FieldRef<"Brief", 'String'>
+    readonly status: FieldRef<"Brief", 'String'>
+    readonly category: FieldRef<"Brief", 'String'>
+    readonly originalTranscript: FieldRef<"Brief", 'String'>
+    readonly greekInsights: FieldRef<"Brief", 'Json'>
+    readonly historicalContext: FieldRef<"Brief", 'String'>
+    readonly outlinePoints: FieldRef<"Brief", 'Json'>
+    readonly telegramMessageId: FieldRef<"Brief", 'String'>
+    readonly telegramChatId: FieldRef<"Brief", 'String'>
+    readonly audioFileId: FieldRef<"Brief", 'String'>
+    readonly audioDuration: FieldRef<"Brief", 'Int'>
+    readonly userId: FieldRef<"Brief", 'String'>
+    readonly readTime: FieldRef<"Brief", 'Int'>
+    readonly isBookmarked: FieldRef<"Brief", 'Boolean'>
+    readonly createdAt: FieldRef<"Brief", 'DateTime'>
+    readonly updatedAt: FieldRef<"Brief", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Brief findUnique
+   */
+  export type BriefFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter, which Brief to fetch.
+     */
+    where: BriefWhereUniqueInput
+  }
+
+  /**
+   * Brief findUniqueOrThrow
+   */
+  export type BriefFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter, which Brief to fetch.
+     */
+    where: BriefWhereUniqueInput
+  }
+
+  /**
+   * Brief findFirst
+   */
+  export type BriefFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter, which Brief to fetch.
+     */
+    where?: BriefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Briefs to fetch.
+     */
+    orderBy?: BriefOrderByWithRelationInput | BriefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Briefs.
+     */
+    cursor?: BriefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Briefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Briefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Briefs.
+     */
+    distinct?: BriefScalarFieldEnum | BriefScalarFieldEnum[]
+  }
+
+  /**
+   * Brief findFirstOrThrow
+   */
+  export type BriefFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter, which Brief to fetch.
+     */
+    where?: BriefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Briefs to fetch.
+     */
+    orderBy?: BriefOrderByWithRelationInput | BriefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Briefs.
+     */
+    cursor?: BriefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Briefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Briefs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Briefs.
+     */
+    distinct?: BriefScalarFieldEnum | BriefScalarFieldEnum[]
+  }
+
+  /**
+   * Brief findMany
+   */
+  export type BriefFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter, which Briefs to fetch.
+     */
+    where?: BriefWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Briefs to fetch.
+     */
+    orderBy?: BriefOrderByWithRelationInput | BriefOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Briefs.
+     */
+    cursor?: BriefWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Briefs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Briefs.
+     */
+    skip?: number
+    distinct?: BriefScalarFieldEnum | BriefScalarFieldEnum[]
+  }
+
+  /**
+   * Brief create
+   */
+  export type BriefCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Brief.
+     */
+    data: XOR<BriefCreateInput, BriefUncheckedCreateInput>
+  }
+
+  /**
+   * Brief createMany
+   */
+  export type BriefCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Briefs.
+     */
+    data: BriefCreateManyInput | BriefCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Brief createManyAndReturn
+   */
+  export type BriefCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * The data used to create many Briefs.
+     */
+    data: BriefCreateManyInput | BriefCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Brief update
+   */
+  export type BriefUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Brief.
+     */
+    data: XOR<BriefUpdateInput, BriefUncheckedUpdateInput>
+    /**
+     * Choose, which Brief to update.
+     */
+    where: BriefWhereUniqueInput
+  }
+
+  /**
+   * Brief updateMany
+   */
+  export type BriefUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Briefs.
+     */
+    data: XOR<BriefUpdateManyMutationInput, BriefUncheckedUpdateManyInput>
+    /**
+     * Filter which Briefs to update
+     */
+    where?: BriefWhereInput
+    /**
+     * Limit how many Briefs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Brief updateManyAndReturn
+   */
+  export type BriefUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * The data used to update Briefs.
+     */
+    data: XOR<BriefUpdateManyMutationInput, BriefUncheckedUpdateManyInput>
+    /**
+     * Filter which Briefs to update
+     */
+    where?: BriefWhereInput
+    /**
+     * Limit how many Briefs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Brief upsert
+   */
+  export type BriefUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Brief to update in case it exists.
+     */
+    where: BriefWhereUniqueInput
+    /**
+     * In case the Brief found by the `where` argument doesn't exist, create a new Brief with this data.
+     */
+    create: XOR<BriefCreateInput, BriefUncheckedCreateInput>
+    /**
+     * In case the Brief was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BriefUpdateInput, BriefUncheckedUpdateInput>
+  }
+
+  /**
+   * Brief delete
+   */
+  export type BriefDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+    /**
+     * Filter which Brief to delete.
+     */
+    where: BriefWhereUniqueInput
+  }
+
+  /**
+   * Brief deleteMany
+   */
+  export type BriefDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Briefs to delete
+     */
+    where?: BriefWhereInput
+    /**
+     * Limit how many Briefs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Brief without action
+   */
+  export type BriefDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brief
+     */
+    select?: BriefSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brief
+     */
+    omit?: BriefOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BriefInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10302,6 +11700,7 @@ export namespace Prisma {
     denomination: 'denomination',
     church: 'church',
     location: 'location',
+    telegramChatId: 'telegramChatId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10362,12 +11761,44 @@ export namespace Prisma {
   export type WaitlistScalarFieldEnum = (typeof WaitlistScalarFieldEnum)[keyof typeof WaitlistScalarFieldEnum]
 
 
+  export const BriefScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    status: 'status',
+    category: 'category',
+    originalTranscript: 'originalTranscript',
+    greekInsights: 'greekInsights',
+    historicalContext: 'historicalContext',
+    outlinePoints: 'outlinePoints',
+    telegramMessageId: 'telegramMessageId',
+    telegramChatId: 'telegramChatId',
+    audioFileId: 'audioFileId',
+    audioDuration: 'audioDuration',
+    userId: 'userId',
+    readTime: 'readTime',
+    isBookmarked: 'isBookmarked',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BriefScalarFieldEnum = (typeof BriefScalarFieldEnum)[keyof typeof BriefScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -10384,6 +11815,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -10430,6 +11870,27 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -10608,11 +12069,13 @@ export namespace Prisma {
     denomination?: StringNullableFilter<"User"> | string | null
     church?: StringNullableFilter<"User"> | string | null
     location?: StringNullableFilter<"User"> | string | null
+    telegramChatId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     chats?: ChatListRelationFilter
+    briefs?: BriefListRelationFilter
     passwordResetToken?: PasswordResetTokenListRelationFilter
   }
 
@@ -10628,11 +12091,13 @@ export namespace Prisma {
     denomination?: SortOrderInput | SortOrder
     church?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    telegramChatId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     chats?: ChatOrderByRelationAggregateInput
+    briefs?: BriefOrderByRelationAggregateInput
     passwordResetToken?: PasswordResetTokenOrderByRelationAggregateInput
   }
 
@@ -10640,6 +12105,7 @@ export namespace Prisma {
     id?: string
     username?: string
     email?: string
+    telegramChatId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -10656,8 +12122,9 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     chats?: ChatListRelationFilter
+    briefs?: BriefListRelationFilter
     passwordResetToken?: PasswordResetTokenListRelationFilter
-  }, "id" | "username" | "email">
+  }, "id" | "username" | "email" | "telegramChatId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10671,6 +12138,7 @@ export namespace Prisma {
     denomination?: SortOrderInput | SortOrder
     church?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    telegramChatId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -10693,6 +12161,7 @@ export namespace Prisma {
     denomination?: StringNullableWithAggregatesFilter<"User"> | string | null
     church?: StringNullableWithAggregatesFilter<"User"> | string | null
     location?: StringNullableWithAggregatesFilter<"User"> | string | null
+    telegramChatId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -10960,6 +12429,128 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Waitlist"> | Date | string
   }
 
+  export type BriefWhereInput = {
+    AND?: BriefWhereInput | BriefWhereInput[]
+    OR?: BriefWhereInput[]
+    NOT?: BriefWhereInput | BriefWhereInput[]
+    id?: StringFilter<"Brief"> | string
+    title?: StringFilter<"Brief"> | string
+    description?: StringNullableFilter<"Brief"> | string | null
+    status?: StringFilter<"Brief"> | string
+    category?: StringFilter<"Brief"> | string
+    originalTranscript?: StringNullableFilter<"Brief"> | string | null
+    greekInsights?: JsonNullableFilter<"Brief">
+    historicalContext?: StringNullableFilter<"Brief"> | string | null
+    outlinePoints?: JsonNullableFilter<"Brief">
+    telegramMessageId?: StringNullableFilter<"Brief"> | string | null
+    telegramChatId?: StringNullableFilter<"Brief"> | string | null
+    audioFileId?: StringNullableFilter<"Brief"> | string | null
+    audioDuration?: IntNullableFilter<"Brief"> | number | null
+    userId?: StringFilter<"Brief"> | string
+    readTime?: IntNullableFilter<"Brief"> | number | null
+    isBookmarked?: BoolFilter<"Brief"> | boolean
+    createdAt?: DateTimeFilter<"Brief"> | Date | string
+    updatedAt?: DateTimeFilter<"Brief"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type BriefOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    category?: SortOrder
+    originalTranscript?: SortOrderInput | SortOrder
+    greekInsights?: SortOrderInput | SortOrder
+    historicalContext?: SortOrderInput | SortOrder
+    outlinePoints?: SortOrderInput | SortOrder
+    telegramMessageId?: SortOrderInput | SortOrder
+    telegramChatId?: SortOrderInput | SortOrder
+    audioFileId?: SortOrderInput | SortOrder
+    audioDuration?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    readTime?: SortOrderInput | SortOrder
+    isBookmarked?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type BriefWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    telegramMessageId?: string
+    AND?: BriefWhereInput | BriefWhereInput[]
+    OR?: BriefWhereInput[]
+    NOT?: BriefWhereInput | BriefWhereInput[]
+    title?: StringFilter<"Brief"> | string
+    description?: StringNullableFilter<"Brief"> | string | null
+    status?: StringFilter<"Brief"> | string
+    category?: StringFilter<"Brief"> | string
+    originalTranscript?: StringNullableFilter<"Brief"> | string | null
+    greekInsights?: JsonNullableFilter<"Brief">
+    historicalContext?: StringNullableFilter<"Brief"> | string | null
+    outlinePoints?: JsonNullableFilter<"Brief">
+    telegramChatId?: StringNullableFilter<"Brief"> | string | null
+    audioFileId?: StringNullableFilter<"Brief"> | string | null
+    audioDuration?: IntNullableFilter<"Brief"> | number | null
+    userId?: StringFilter<"Brief"> | string
+    readTime?: IntNullableFilter<"Brief"> | number | null
+    isBookmarked?: BoolFilter<"Brief"> | boolean
+    createdAt?: DateTimeFilter<"Brief"> | Date | string
+    updatedAt?: DateTimeFilter<"Brief"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "telegramMessageId">
+
+  export type BriefOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    category?: SortOrder
+    originalTranscript?: SortOrderInput | SortOrder
+    greekInsights?: SortOrderInput | SortOrder
+    historicalContext?: SortOrderInput | SortOrder
+    outlinePoints?: SortOrderInput | SortOrder
+    telegramMessageId?: SortOrderInput | SortOrder
+    telegramChatId?: SortOrderInput | SortOrder
+    audioFileId?: SortOrderInput | SortOrder
+    audioDuration?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    readTime?: SortOrderInput | SortOrder
+    isBookmarked?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BriefCountOrderByAggregateInput
+    _avg?: BriefAvgOrderByAggregateInput
+    _max?: BriefMaxOrderByAggregateInput
+    _min?: BriefMinOrderByAggregateInput
+    _sum?: BriefSumOrderByAggregateInput
+  }
+
+  export type BriefScalarWhereWithAggregatesInput = {
+    AND?: BriefScalarWhereWithAggregatesInput | BriefScalarWhereWithAggregatesInput[]
+    OR?: BriefScalarWhereWithAggregatesInput[]
+    NOT?: BriefScalarWhereWithAggregatesInput | BriefScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Brief"> | string
+    title?: StringWithAggregatesFilter<"Brief"> | string
+    description?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    status?: StringWithAggregatesFilter<"Brief"> | string
+    category?: StringWithAggregatesFilter<"Brief"> | string
+    originalTranscript?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    greekInsights?: JsonNullableWithAggregatesFilter<"Brief">
+    historicalContext?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    outlinePoints?: JsonNullableWithAggregatesFilter<"Brief">
+    telegramMessageId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    telegramChatId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    audioFileId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
+    audioDuration?: IntNullableWithAggregatesFilter<"Brief"> | number | null
+    userId?: StringWithAggregatesFilter<"Brief"> | string
+    readTime?: IntNullableWithAggregatesFilter<"Brief"> | number | null
+    isBookmarked?: BoolWithAggregatesFilter<"Brief"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Brief"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Brief"> | Date | string
+  }
+
   export type AccountCreateInput = {
     id?: string
     type: string
@@ -11124,11 +12715,13 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
+    briefs?: BriefCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenCreateNestedManyWithoutUserInput
   }
 
@@ -11144,11 +12737,13 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
+    briefs?: BriefUncheckedCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -11164,11 +12759,13 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
+    briefs?: BriefUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUpdateManyWithoutUserNestedInput
   }
 
@@ -11184,11 +12781,13 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
+    briefs?: BriefUncheckedUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -11204,6 +12803,7 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11220,6 +12820,7 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11236,6 +12837,7 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11507,6 +13109,152 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BriefCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    readTime?: number | null
+    isBookmarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBriefsInput
+  }
+
+  export type BriefUncheckedCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    userId: string
+    readTime?: number | null
+    isBookmarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BriefUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBriefsNestedInput
+  }
+
+  export type BriefUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: StringFieldUpdateOperationsInput | string
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BriefCreateManyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    userId: string
+    readTime?: number | null
+    isBookmarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BriefUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BriefUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: StringFieldUpdateOperationsInput | string
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11743,6 +13491,12 @@ export namespace Prisma {
     none?: ChatWhereInput
   }
 
+  export type BriefListRelationFilter = {
+    every?: BriefWhereInput
+    some?: BriefWhereInput
+    none?: BriefWhereInput
+  }
+
   export type PasswordResetTokenListRelationFilter = {
     every?: PasswordResetTokenWhereInput
     some?: PasswordResetTokenWhereInput
@@ -11758,6 +13512,10 @@ export namespace Prisma {
   }
 
   export type ChatOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BriefOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11777,6 +13535,7 @@ export namespace Prisma {
     denomination?: SortOrder
     church?: SortOrder
     location?: SortOrder
+    telegramChatId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11793,6 +13552,7 @@ export namespace Prisma {
     denomination?: SortOrder
     church?: SortOrder
     location?: SortOrder
+    telegramChatId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11809,6 +13569,7 @@ export namespace Prisma {
     denomination?: SortOrder
     church?: SortOrder
     location?: SortOrder
+    telegramChatId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11960,6 +13721,137 @@ export namespace Prisma {
     type?: SortOrder
     createdAt?: SortOrder
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type BriefCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    category?: SortOrder
+    originalTranscript?: SortOrder
+    greekInsights?: SortOrder
+    historicalContext?: SortOrder
+    outlinePoints?: SortOrder
+    telegramMessageId?: SortOrder
+    telegramChatId?: SortOrder
+    audioFileId?: SortOrder
+    audioDuration?: SortOrder
+    userId?: SortOrder
+    readTime?: SortOrder
+    isBookmarked?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BriefAvgOrderByAggregateInput = {
+    audioDuration?: SortOrder
+    readTime?: SortOrder
+  }
+
+  export type BriefMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    category?: SortOrder
+    originalTranscript?: SortOrder
+    historicalContext?: SortOrder
+    telegramMessageId?: SortOrder
+    telegramChatId?: SortOrder
+    audioFileId?: SortOrder
+    audioDuration?: SortOrder
+    userId?: SortOrder
+    readTime?: SortOrder
+    isBookmarked?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BriefMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    category?: SortOrder
+    originalTranscript?: SortOrder
+    historicalContext?: SortOrder
+    telegramMessageId?: SortOrder
+    telegramChatId?: SortOrder
+    audioFileId?: SortOrder
+    audioDuration?: SortOrder
+    userId?: SortOrder
+    readTime?: SortOrder
+    isBookmarked?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BriefSumOrderByAggregateInput = {
+    audioDuration?: SortOrder
+    readTime?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
@@ -12030,6 +13922,13 @@ export namespace Prisma {
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
+  export type BriefCreateNestedManyWithoutUserInput = {
+    create?: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput> | BriefCreateWithoutUserInput[] | BriefUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BriefCreateOrConnectWithoutUserInput | BriefCreateOrConnectWithoutUserInput[]
+    createMany?: BriefCreateManyUserInputEnvelope
+    connect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+  }
+
   export type PasswordResetTokenCreateNestedManyWithoutUserInput = {
     create?: XOR<PasswordResetTokenCreateWithoutUserInput, PasswordResetTokenUncheckedCreateWithoutUserInput> | PasswordResetTokenCreateWithoutUserInput[] | PasswordResetTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetTokenCreateOrConnectWithoutUserInput | PasswordResetTokenCreateOrConnectWithoutUserInput[]
@@ -12056,6 +13955,13 @@ export namespace Prisma {
     connectOrCreate?: ChatCreateOrConnectWithoutUserInput | ChatCreateOrConnectWithoutUserInput[]
     createMany?: ChatCreateManyUserInputEnvelope
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+  }
+
+  export type BriefUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput> | BriefCreateWithoutUserInput[] | BriefUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BriefCreateOrConnectWithoutUserInput | BriefCreateOrConnectWithoutUserInput[]
+    createMany?: BriefCreateManyUserInputEnvelope
+    connect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
   }
 
   export type PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput = {
@@ -12109,6 +14015,20 @@ export namespace Prisma {
     update?: ChatUpdateWithWhereUniqueWithoutUserInput | ChatUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ChatUpdateManyWithWhereWithoutUserInput | ChatUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
+  }
+
+  export type BriefUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput> | BriefCreateWithoutUserInput[] | BriefUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BriefCreateOrConnectWithoutUserInput | BriefCreateOrConnectWithoutUserInput[]
+    upsert?: BriefUpsertWithWhereUniqueWithoutUserInput | BriefUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BriefCreateManyUserInputEnvelope
+    set?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    disconnect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    delete?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    connect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    update?: BriefUpdateWithWhereUniqueWithoutUserInput | BriefUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BriefUpdateManyWithWhereWithoutUserInput | BriefUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BriefScalarWhereInput | BriefScalarWhereInput[]
   }
 
   export type PasswordResetTokenUpdateManyWithoutUserNestedInput = {
@@ -12165,6 +14085,20 @@ export namespace Prisma {
     update?: ChatUpdateWithWhereUniqueWithoutUserInput | ChatUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ChatUpdateManyWithWhereWithoutUserInput | ChatUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
+  }
+
+  export type BriefUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput> | BriefCreateWithoutUserInput[] | BriefUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BriefCreateOrConnectWithoutUserInput | BriefCreateOrConnectWithoutUserInput[]
+    upsert?: BriefUpsertWithWhereUniqueWithoutUserInput | BriefUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BriefCreateManyUserInputEnvelope
+    set?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    disconnect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    delete?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    connect?: BriefWhereUniqueInput | BriefWhereUniqueInput[]
+    update?: BriefUpdateWithWhereUniqueWithoutUserInput | BriefUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BriefUpdateManyWithWhereWithoutUserInput | BriefUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BriefScalarWhereInput | BriefScalarWhereInput[]
   }
 
   export type PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput = {
@@ -12263,6 +14197,24 @@ export namespace Prisma {
     upsert?: ChatUpsertWithoutMessagesInput
     connect?: ChatWhereUniqueInput
     update?: XOR<XOR<ChatUpdateToOneWithWhereWithoutMessagesInput, ChatUpdateWithoutMessagesInput>, ChatUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type UserCreateNestedOneWithoutBriefsInput = {
+    create?: XOR<UserCreateWithoutBriefsInput, UserUncheckedCreateWithoutBriefsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBriefsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserUpdateOneRequiredWithoutBriefsNestedInput = {
+    create?: XOR<UserCreateWithoutBriefsInput, UserUncheckedCreateWithoutBriefsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBriefsInput
+    upsert?: UserUpsertWithoutBriefsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBriefsInput, UserUpdateWithoutBriefsInput>, UserUncheckedUpdateWithoutBriefsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12426,6 +14378,42 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -12438,10 +14426,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
+    briefs?: BriefCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenCreateNestedManyWithoutUserInput
   }
 
@@ -12457,10 +14447,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
+    briefs?: BriefUncheckedCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12492,10 +14484,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
+    briefs?: BriefUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUpdateManyWithoutUserNestedInput
   }
 
@@ -12511,10 +14505,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
+    briefs?: BriefUncheckedUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12530,10 +14526,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
+    briefs?: BriefCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenCreateNestedManyWithoutUserInput
   }
 
@@ -12549,10 +14547,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
+    briefs?: BriefUncheckedCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12584,10 +14584,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
+    briefs?: BriefUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUpdateManyWithoutUserNestedInput
   }
 
@@ -12603,10 +14605,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
+    briefs?: BriefUncheckedUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12693,6 +14697,56 @@ export namespace Prisma {
 
   export type ChatCreateManyUserInputEnvelope = {
     data: ChatCreateManyUserInput | ChatCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BriefCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    readTime?: number | null
+    isBookmarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BriefUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    readTime?: number | null
+    isBookmarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BriefCreateOrConnectWithoutUserInput = {
+    where: BriefWhereUniqueInput
+    create: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput>
+  }
+
+  export type BriefCreateManyUserInputEnvelope = {
+    data: BriefCreateManyUserInput | BriefCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -12807,6 +14861,46 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Chat"> | Date | string
   }
 
+  export type BriefUpsertWithWhereUniqueWithoutUserInput = {
+    where: BriefWhereUniqueInput
+    update: XOR<BriefUpdateWithoutUserInput, BriefUncheckedUpdateWithoutUserInput>
+    create: XOR<BriefCreateWithoutUserInput, BriefUncheckedCreateWithoutUserInput>
+  }
+
+  export type BriefUpdateWithWhereUniqueWithoutUserInput = {
+    where: BriefWhereUniqueInput
+    data: XOR<BriefUpdateWithoutUserInput, BriefUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BriefUpdateManyWithWhereWithoutUserInput = {
+    where: BriefScalarWhereInput
+    data: XOR<BriefUpdateManyMutationInput, BriefUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BriefScalarWhereInput = {
+    AND?: BriefScalarWhereInput | BriefScalarWhereInput[]
+    OR?: BriefScalarWhereInput[]
+    NOT?: BriefScalarWhereInput | BriefScalarWhereInput[]
+    id?: StringFilter<"Brief"> | string
+    title?: StringFilter<"Brief"> | string
+    description?: StringNullableFilter<"Brief"> | string | null
+    status?: StringFilter<"Brief"> | string
+    category?: StringFilter<"Brief"> | string
+    originalTranscript?: StringNullableFilter<"Brief"> | string | null
+    greekInsights?: JsonNullableFilter<"Brief">
+    historicalContext?: StringNullableFilter<"Brief"> | string | null
+    outlinePoints?: JsonNullableFilter<"Brief">
+    telegramMessageId?: StringNullableFilter<"Brief"> | string | null
+    telegramChatId?: StringNullableFilter<"Brief"> | string | null
+    audioFileId?: StringNullableFilter<"Brief"> | string | null
+    audioDuration?: IntNullableFilter<"Brief"> | number | null
+    userId?: StringFilter<"Brief"> | string
+    readTime?: IntNullableFilter<"Brief"> | number | null
+    isBookmarked?: BoolFilter<"Brief"> | boolean
+    createdAt?: DateTimeFilter<"Brief"> | Date | string
+    updatedAt?: DateTimeFilter<"Brief"> | Date | string
+  }
+
   export type PasswordResetTokenUpsertWithWhereUniqueWithoutUserInput = {
     where: PasswordResetTokenWhereUniqueInput
     update: XOR<PasswordResetTokenUpdateWithoutUserInput, PasswordResetTokenUncheckedUpdateWithoutUserInput>
@@ -12846,11 +14940,13 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
+    briefs?: BriefCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetTokenInput = {
@@ -12865,11 +14961,13 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
+    briefs?: BriefUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetTokenInput = {
@@ -12900,11 +14998,13 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
+    briefs?: BriefUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetTokenInput = {
@@ -12919,11 +15019,13 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
+    briefs?: BriefUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutChatsInput = {
@@ -12938,10 +15040,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    briefs?: BriefCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenCreateNestedManyWithoutUserInput
   }
 
@@ -12957,10 +15061,12 @@ export namespace Prisma {
     denomination?: string | null
     church?: string | null
     location?: string | null
+    telegramChatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    briefs?: BriefUncheckedCreateNestedManyWithoutUserInput
     passwordResetToken?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13016,10 +15122,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    briefs?: BriefUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUpdateManyWithoutUserNestedInput
   }
 
@@ -13035,10 +15143,12 @@ export namespace Prisma {
     denomination?: NullableStringFieldUpdateOperationsInput | string | null
     church?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    briefs?: BriefUncheckedUpdateManyWithoutUserNestedInput
     passwordResetToken?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13117,6 +15227,106 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserCreateWithoutBriefsInput = {
+    id?: string
+    name?: string | null
+    username?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    bio?: string | null
+    denomination?: string | null
+    church?: string | null
+    location?: string | null
+    telegramChatId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    chats?: ChatCreateNestedManyWithoutUserInput
+    passwordResetToken?: PasswordResetTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBriefsInput = {
+    id?: string
+    name?: string | null
+    username?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    bio?: string | null
+    denomination?: string | null
+    church?: string | null
+    location?: string | null
+    telegramChatId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    chats?: ChatUncheckedCreateNestedManyWithoutUserInput
+    passwordResetToken?: PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBriefsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBriefsInput, UserUncheckedCreateWithoutBriefsInput>
+  }
+
+  export type UserUpsertWithoutBriefsInput = {
+    update: XOR<UserUpdateWithoutBriefsInput, UserUncheckedUpdateWithoutBriefsInput>
+    create: XOR<UserCreateWithoutBriefsInput, UserUncheckedCreateWithoutBriefsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBriefsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBriefsInput, UserUncheckedUpdateWithoutBriefsInput>
+  }
+
+  export type UserUpdateWithoutBriefsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    denomination?: NullableStringFieldUpdateOperationsInput | string | null
+    church?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    chats?: ChatUpdateManyWithoutUserNestedInput
+    passwordResetToken?: PasswordResetTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBriefsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    denomination?: NullableStringFieldUpdateOperationsInput | string | null
+    church?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
+    passwordResetToken?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type AccountCreateManyUserInput = {
     id?: string
     type: string
@@ -13140,6 +15350,26 @@ export namespace Prisma {
   export type ChatCreateManyUserInput = {
     id?: string
     title: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BriefCreateManyUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: string
+    category?: string
+    originalTranscript?: string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: string | null
+    telegramChatId?: string | null
+    audioFileId?: string | null
+    audioDuration?: number | null
+    readTime?: number | null
+    isBookmarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13230,6 +15460,66 @@ export namespace Prisma {
   export type ChatUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BriefUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BriefUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BriefUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    originalTranscript?: NullableStringFieldUpdateOperationsInput | string | null
+    greekInsights?: NullableJsonNullValueInput | InputJsonValue
+    historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
+    outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
+    audioDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    readTime?: NullableIntFieldUpdateOperationsInput | number | null
+    isBookmarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

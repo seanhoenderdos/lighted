@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localfont from "next/font/local";
+import { Inter, Playfair_Display, Work_Sans } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/context/Theme";
 import { Toaster } from "@/components/ui/sonner";
@@ -8,22 +8,22 @@ import { auth } from "@/auth";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const audiowide = localfont({
-  src: "./fonts/audiowideReg.ttf",
-  variable: "--font-audiowide",
-  weight: "400",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const orbitron = localfont({
-  src: "./fonts/orbitronVF.ttf",
-  variable: "--font-orbitron",
-  weight: "300, 400, 500, 600, 700",
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
 });
 
-const montserrat = localfont({
-  src: "./fonts/montserratVF.ttf",
-  variable: "--font-montserrat",
-  weight: "300, 400, 500, 600, 700",
+const workSans = Work_Sans({
+  subsets: ["latin"],
+  variable: "--font-work-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -49,7 +49,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       </head>
       <SessionProvider session={session}>
         <body
-          className={`${montserrat.variable} ${audiowide.variable} ${orbitron.variable} antialiased`}
+          className={`${inter.variable} ${playfair.variable} ${workSans.variable} font-sans antialiased`}
         >
           <ThemeProvider attribute="class">
             {children}

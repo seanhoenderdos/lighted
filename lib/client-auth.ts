@@ -6,7 +6,7 @@
  */
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { isAuthenticated as serverIsAuthenticated } from "@/app/actions/chat-actions";
+import { isAuthenticated as serverIsAuthenticated } from "@/app/actions/auth-actions";
 
 // Export NextAuth client hooks
 export { useSession, signIn, signOut };
