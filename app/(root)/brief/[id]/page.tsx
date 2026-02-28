@@ -227,11 +227,11 @@ ${outlineSection}
 
         {/* Content Tabs */}
         <Tabs defaultValue="transcript" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="transcript">Transcript</TabsTrigger>
-            <TabsTrigger value="greek">Greek Insights</TabsTrigger>
-            <TabsTrigger value="historical">Historical Context</TabsTrigger>
-            <TabsTrigger value="outline">Outline</TabsTrigger>
+          <TabsList className="w-full flex flex-wrap gap-1">
+            <TabsTrigger value="transcript" className="flex-1 min-w-[80px] text-xs sm:text-sm">Transcript</TabsTrigger>
+            <TabsTrigger value="greek" className="flex-1 min-w-[80px] text-xs sm:text-sm">Greek</TabsTrigger>
+            <TabsTrigger value="historical" className="flex-1 min-w-[80px] text-xs sm:text-sm">Context</TabsTrigger>
+            <TabsTrigger value="outline" className="flex-1 min-w-[80px] text-xs sm:text-sm">Outline</TabsTrigger>
           </TabsList>
 
           {/* Original Transcript */}
