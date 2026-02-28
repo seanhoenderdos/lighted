@@ -1,6 +1,9 @@
 import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Skip trailing slash redirects for API routes (fixes Telegram webhook 307 issue)
+  skipTrailingSlashRedirect: true,
+  
   env: {
     HUGGING_FACE_API_KEY: process.env.HUGGING_FACE_API_KEY,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
