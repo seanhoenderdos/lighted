@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 const LandingPage = () => {
@@ -15,17 +14,6 @@ const LandingPage = () => {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             Lighted
           </h1>
-          
-          {/* Logo */}
-          <div className="flex flex-col items-center justify-center">
-            <Image
-              src="/images/site-logo.svg"
-              width={150}
-              height={150}
-              alt="Lighted"
-              className="dark:invert-0"
-            />
-          </div>
 
           {/* Tagline */}
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-muted-foreground">
