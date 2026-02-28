@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   });
 
   // Public routes accessible even when not authenticated
-  const publicRoutes = ["/sign-in", "/sign-up", "/reset-password"];
+  const publicRoutes = ["/", "/sign-in", "/sign-up", "/reset-password", "/privacy", "/terms"];
   
   const isPublicRoute = publicRoutes.some(route => 
     request.nextUrl.pathname === route || 
@@ -19,6 +19,11 @@ export async function middleware(request: NextRequest) {
   // If user is not authenticated and trying to access protected route
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  // If user IS authenticated and on the home page, redirect to dashboard
+  if (token && request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
