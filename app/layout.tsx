@@ -27,9 +27,9 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Lighted - Voice-to-Exegesis for Pastors",
+  title: "Lighted",
   description:
-    "Send a voice note via Telegram with your sermon topic or scripture passage, and receive a beautifully crafted exegesis brief in seconds.",
+    "Voice-to-Exegesis for Pastors. Send a voice note via Telegram with your sermon topic or scripture passage, and receive a beautifully crafted exegesis brief in seconds.",
   icons: {
     icon: "/images/site-logo.svg",
   },

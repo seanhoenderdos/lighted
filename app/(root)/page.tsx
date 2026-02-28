@@ -11,22 +11,26 @@ const LandingPage = () => {
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
         <div className="max-w-3xl mx-auto space-y-8">
+          {/* App Name - Primary H1 */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+            Lighted
+          </h1>
+          
           {/* Logo */}
-          <div className="flex flex-col items-center justify-center mb-8">
+          <div className="flex flex-col items-center justify-center">
             <Image
               src="/images/site-logo.svg"
-              width={200}
-              height={200}
+              width={150}
+              height={150}
               alt="Lighted"
               className="dark:invert-0"
             />
-            <h2 className="text-2xl font-bold mt-4">Lighted</h2>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-            <span className="text-primary">Lighted</span> - Voice-to-Exegesis for Pastors
-          </h1>
+          {/* Tagline */}
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-muted-foreground">
+            Voice-to-Exegesis for Pastors
+          </h2>
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
