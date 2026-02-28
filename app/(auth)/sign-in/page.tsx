@@ -32,8 +32,8 @@ const SignIn = () => {
         description: "Redirecting...",
       });
 
-      // Redirect to the home page
-      window.location.href = ROUTES.HOME;
+      // Redirect to dashboard
+      window.location.href = "/dashboard";
       return { success: true, data: result };
     } catch (error) {
       console.error("Sign-in error:", error);
