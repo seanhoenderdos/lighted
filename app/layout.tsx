@@ -51,7 +51,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <body
           className={`${inter.variable} ${playfair.variable} ${workSans.variable} font-sans antialiased`}
         >
-          <ThemeProvider attribute="class">
+          <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
             {children}
             <Analytics />
             <SpeedInsights />
