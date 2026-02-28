@@ -12,7 +12,7 @@ const LandingPage = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Logo */}
-          <div className="flex justify-center mb-8">
+          <div className="flex flex-col items-center justify-center mb-8">
             <Image
               src="/images/site-logo.svg"
               width={200}
@@ -20,12 +20,12 @@ const LandingPage = () => {
               alt="Lighted"
               className="dark:invert-0"
             />
+            <h2 className="text-2xl font-bold mt-4">Lighted</h2>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-            Voice-to-Exegesis for{' '}
-            <span className="text-primary">Pastors</span>
+            <span className="text-primary">Lighted</span> - Voice-to-Exegesis for Pastors
           </h1>
 
           {/* Subheadline */}
