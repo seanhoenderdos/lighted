@@ -4,9 +4,16 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
   // Use getToken instead of auth() to avoid using Prisma in Edge runtime
+  // NextAuth v5 (Auth.js) uses "authjs" prefix for cookies
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieName = isProduction 
+    ? "__Secure-authjs.session-token" 
+    : "authjs.session-token";
+    
   const token = await getToken({ 
     req: request,
-    secret: process.env.AUTH_SECRET
+    secret: process.env.AUTH_SECRET,
+    cookieName,
   });
 
   // Public routes accessible even when not authenticated
@@ -16,6 +23,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname === route || 
     request.nextUrl.pathname.startsWith("/api/")
   );
+  
   // If user is not authenticated and trying to access protected route
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
