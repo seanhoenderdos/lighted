@@ -27,9 +27,9 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "LightEd",
+  title: "Lighted - Voice-to-Exegesis for Pastors",
   description:
-    "An ai educational platform to empower pastors and church leaders to share their light",
+    "Send a voice note via Telegram with your sermon topic or scripture passage, and receive a beautifully crafted exegesis brief in seconds.",
   icons: {
     icon: "/images/site-logo.svg",
   },
