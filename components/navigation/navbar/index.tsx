@@ -18,7 +18,7 @@ const Navbar = () => {
   const userId = session?.user?.id || '';
 
   const handleSignOut = async () => {
-    await signOut({ redirect: true, callbackUrl: '/sign-in' });
+    await signOut({ redirect: true, callbackUrl: '/' });
   };
 
   return (

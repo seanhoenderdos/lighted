@@ -106,16 +106,37 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token.id) {
         // Map token.id to session.user.id
         session.user.id = token.id as string;
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      // On initial sign-in, user object is available
       if (user && user.id) {
         token.id = user.id;
       }
+      
+      // Fallback for credentials users: if token.id is not set but we have email,
+      // look up the user in the database to get their ID
+      if (!token.id && token.email) {
+        const dbUser = await withPrismaRetry(() =>
+          prisma.user.findUnique({
+            where: { email: token.email as string },
+            select: { id: true }
+          })
+        );
+        if (dbUser) {
+          token.id = dbUser.id;
+        }
+      }
+      
+      // Also store the account provider for debugging/future use
+      if (account) {
+        token.provider = account.provider;
+      }
+      
       return token;
     }
   },  pages: {

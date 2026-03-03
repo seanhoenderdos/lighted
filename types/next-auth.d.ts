@@ -26,8 +26,9 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
-  /** Extend the JWT with user ID */
+  /** Extend the JWT with user ID and provider */
   interface JWT extends NextAuthJWT {
     id: string;
+    provider?: string;
   }
 }
