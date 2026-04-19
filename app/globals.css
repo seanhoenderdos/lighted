@@ -3,18 +3,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* New Theme Colors */
-  --color-cream-bg: #F5F2EA;
-  --color-primary: #4A5D4F;
-  --color-primary-light: #6B816F;
-  --color-accent-gold: #C8A45D;
-  --color-sage-accent: #8A9A9A;
-  --color-text-main: #2C2C2C;
-  --color-text-muted: #6E6B64;
-  --color-border-subtle: rgba(74, 93, 79, 0.1);
+  /* Theme Colors — Warm & Scholarly */
+  --color-cream-bg: #FAFAF7;
+  --color-primary: #C2785C;
+  --color-primary-light: #D4917A;
+  --color-accent-gold: #8B7355;
+  --color-sage-accent: #A8A29E;
+  --color-text-main: #1C1917;
+  --color-text-muted: #57534E;
+  --color-border-subtle: #E7E5E4;
   --color-paper-white: #FFFFFF;
-  --color-charcoal-dark: #363C3C;
-  --color-charcoal-light: #5A6161;
+  --color-charcoal-dark: #292524;
+  --color-charcoal-light: #44403C;
   
   /* Fonts */
   --font-sans: var(--font-inter), "Inter", sans-serif;
@@ -22,9 +22,9 @@
   --font-display: var(--font-work-sans), "Work Sans", sans-serif;
 
   /* Shadows */
-  --shadow-soft: 0 4px 20px -2px rgba(74, 93, 79, 0.05);
-  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
-  --shadow-floating: 0 12px 30px -10px rgba(54, 60, 60, 0.4);
+  --shadow-soft: 0 4px 20px -2px rgba(28, 25, 23, 0.05);
+  --shadow-card: 0 2px 10px rgba(28, 25, 23, 0.04);
+  --shadow-floating: 0 12px 30px -10px rgba(41, 37, 36, 0.3);
 
   /* Mapped theme variables for component compatibility */
   --color-background: var(--background);
@@ -65,79 +65,79 @@
 }
 
 :root {
-  --background: #F5F2EA;
-  --foreground: #2C2C2C;
+  --background: #FAFAF7;
+  --foreground: #1C1917;
   --card: #FFFFFF;
-  --card-foreground: #2C2C2C;
+  --card-foreground: #1C1917;
   --popover: #FFFFFF;
-  --popover-foreground: #2C2C2C;
-  --primary: #4A5D4F;
+  --popover-foreground: #1C1917;
+  --primary: #C2785C;
   --primary-foreground: #FFFFFF;
-  --secondary: #F5F2EA;
-  --secondary-foreground: #4A5D4F;
-  --muted: rgba(74, 93, 79, 0.1);
-  --muted-foreground: #6E6B64;
-  --accent: #C8A45D;
+  --secondary: #F5F5F4;
+  --secondary-foreground: #44403C;
+  --muted: #F5F5F4;
+  --muted-foreground: #78716C;
+  --accent: #8B7355;
   --accent-foreground: #FFFFFF;
   --destructive: #B54A4A;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(74, 93, 79, 0.1);
-  --input: rgba(74, 93, 79, 0.15);
-  --ring: #4A5D4F;
-  --chart-1: #4A5D4F;
-  --chart-2: #C8A45D;
-  --chart-3: #8A9A9A;
-  --chart-4: #6B816F;
-  --chart-5: #363C3C;
+  --border: #E7E5E4;
+  --input: #E7E5E4;
+  --ring: #C2785C;
+  --chart-1: #C2785C;
+  --chart-2: #8B7355;
+  --chart-3: #A8A29E;
+  --chart-4: #D4917A;
+  --chart-5: #292524;
   --radius: 0.625rem;
-  --sidebar: #4A5D4F;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #C8A45D;
+  --sidebar: #292524;
+  --sidebar-foreground: #FAFAF7;
+  --sidebar-primary: #C2785C;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: rgba(200, 164, 93, 0.2);
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #C8A45D;
+  --sidebar-accent: rgba(194, 120, 92, 0.15);
+  --sidebar-accent-foreground: #FAFAF7;
+  --sidebar-border: rgba(250, 250, 247, 0.1);
+  --sidebar-ring: #C2785C;
 }
 
 .dark {
-  --background: #363C3C;
-  --foreground: #F5F2EA;
-  --card: #2C2C2C;
-  --card-foreground: #F5F2EA;
-  --popover: #2C2C2C;
-  --popover-foreground: #F5F2EA;
-  --primary: #6B816F;
+  --background: #1C1917;
+  --foreground: #FAFAF7;
+  --card: #292524;
+  --card-foreground: #FAFAF7;
+  --popover: #292524;
+  --popover-foreground: #FAFAF7;
+  --primary: #D4917A;
   --primary-foreground: #FFFFFF;
-  --secondary: #5A6161;
-  --secondary-foreground: #F5F2EA;
-  --muted: rgba(107, 129, 111, 0.2);
-  --muted-foreground: rgba(245, 242, 234, 0.7);
-  --accent: #C8A45D;
+  --secondary: #44403C;
+  --secondary-foreground: #FAFAF7;
+  --muted: rgba(168, 162, 158, 0.15);
+  --muted-foreground: rgba(250, 250, 247, 0.7);
+  --accent: #8B7355;
   --accent-foreground: #FFFFFF;
   --destructive: #B54A4A;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(245, 242, 234, 0.1);
-  --input: rgba(107, 129, 111, 0.3);
-  --ring: #6B816F;
-  --chart-1: #6B816F;
-  --chart-2: #C8A45D;
-  --chart-3: #8A9A9A;
-  --chart-4: #F5F2EA;
-  --chart-5: #4A5D4F;
-  --sidebar: #2C2C2C;
-  --sidebar-foreground: #F5F2EA;
-  --sidebar-primary: #C8A45D;
+  --border: rgba(250, 250, 247, 0.1);
+  --input: rgba(168, 162, 158, 0.2);
+  --ring: #D4917A;
+  --chart-1: #D4917A;
+  --chart-2: #8B7355;
+  --chart-3: #A8A29E;
+  --chart-4: #FAFAF7;
+  --chart-5: #C2785C;
+  --sidebar: #292524;
+  --sidebar-foreground: #FAFAF7;
+  --sidebar-primary: #C2785C;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: rgba(200, 164, 93, 0.2);
-  --sidebar-accent-foreground: #F5F2EA;
-  --sidebar-border: rgba(107, 129, 111, 0.2);
-  --sidebar-ring: #C8A45D;
+  --sidebar-accent: rgba(194, 120, 92, 0.2);
+  --sidebar-accent-foreground: #FAFAF7;
+  --sidebar-border: rgba(168, 162, 158, 0.2);
+  --sidebar-ring: #C2785C;
 }
 
 body {
-  background-color: var(--color-cream-bg);
-  color: var(--color-text-main);
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans);
 }
 
@@ -247,38 +247,38 @@ body {
   }
 
   .primary-gradient {
-    background: linear-gradient(129deg, #4A5D4F 0%, #6B816F 100%);
+    background: linear-gradient(129deg, #C2785C 0%, #D4917A 100%);
   }
 
   .accent-gradient {
-    background: linear-gradient(129deg, #C8A45D 0%, #D4B574 100%);
+    background: linear-gradient(129deg, #8B7355 0%, #A08B6C 100%);
   }
 
   .dark-gradient {
     background: linear-gradient(
       232deg,
-      rgba(54, 60, 60, 0.6) 0%,
-      rgba(44, 44, 44, 0.9) 100%
+      rgba(41, 37, 36, 0.6) 0%,
+      rgba(28, 25, 23, 0.9) 100%
     );
   }
 
   .light-gradient {
     background: linear-gradient(
       132deg,
-      rgba(245, 242, 234, 0.8) 0%,
+      rgba(250, 250, 247, 0.8) 0%,
       rgba(255, 255, 255, 0.5) 100%
     );
   }
 
   .primary-text-gradient {
-    background: linear-gradient(129deg, #4A5D4F 0%, #6B816F 100%);
+    background: linear-gradient(129deg, #C2785C 0%, #D4917A 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .gold-text-gradient {
-    background: linear-gradient(129deg, #C8A45D 0%, #D4B574 100%);
+    background: linear-gradient(129deg, #8B7355 0%, #A08B6C 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

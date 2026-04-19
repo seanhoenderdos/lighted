@@ -27,11 +27,30 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://lighted.life"),
   title: "Lighted",
   description:
     "Voice-to-Exegesis for Pastors. Send a voice note via Telegram with your sermon topic or scripture passage, and receive a beautifully crafted exegesis brief in seconds.",
   icons: {
     icon: "/images/site-logo.svg",
+  },
+  openGraph: {
+    title: "Lighted — Free Sermon Research for Pastors",
+    description:
+      "Greek & Hebrew word studies, historical context, and cross-references for any passage — in seconds.",
+    url: "https://lighted.life",
+    siteName: "Lighted",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lighted — Free Sermon Research for Pastors",
+    description:
+      "Greek & Hebrew word studies, historical context, and cross-references for any passage — in seconds.",
+  },
+  alternates: {
+    canonical: "https://lighted.life",
   },
 };
 
@@ -45,6 +64,48 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           rel="stylesheet"
           type="text/css"
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebApplication",
+                  "name": "Lighted",
+                  "url": "https://lighted.life",
+                  "description":
+                    "Free voice-to-exegesis tool for pastors. Send a Telegram voice note with your sermon topic or scripture passage and receive a detailed exegesis brief in seconds.",
+                  "applicationCategory": "Productivity",
+                  "operatingSystem": "All",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
+                  },
+                  "featureList": [
+                    "Greek & Hebrew Word Studies",
+                    "Historical & Cultural Context",
+                    "Sermon Outline Suggestions",
+                    "Cross-References",
+                    "Telegram Voice Note Input",
+                  ],
+                },
+                {
+                  "@type": "Organization",
+                  "name": "Lighted",
+                  "url": "https://lighted.life",
+                  "logo": "https://lighted.life/images/site-logo.svg",
+                },
+                {
+                  "@type": "WebSite",
+                  "name": "Lighted",
+                  "url": "https://lighted.life",
+                },
+              ],
+            }),
+          }}
         />
       </head>
       <SessionProvider session={session}>

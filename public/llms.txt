@@ -1,0 +1,26 @@
+# Lighted
+
+> Free voice-to-exegesis tool for pastors. Send a Telegram voice note with your sermon topic or scripture passage and receive a detailed exegesis brief in seconds.
+
+Lighted automates sermon research so pastors can focus on crafting their message. It is completely free and always will be.
+
+## Features
+
+- **Greek & Hebrew Word Studies**: Instant access to original-language insights for any passage. No seminary Greek required.
+- **Historical & Cultural Context**: Understand the world behind the text — customs, geography, political dynamics, and more.
+- **Sermon Outline Suggestions**: Structured outline ideas across 7 sermon styles — expository, topical, narrative, and more.
+- **Telegram Voice Notes**: Start with a voice note on the go or dive in from your desk. Your research follows you.
+- **Cross-References**: Discover related passages and thematic connections across Scripture.
+
+## How It Works
+
+1. Share your sermon topic or passage via Telegram voice note.
+2. Lighted generates a detailed exegesis brief with Greek/Hebrew insights, historical context, and cross-references.
+3. Review and refine your brief, ready for sermon preparation.
+
+## Links
+
+- Homepage: https://lighted.life
+- Sign Up: https://lighted.life/sign-up
+- Privacy Policy: https://lighted.life/privacy
+- Terms of Service: https://lighted.life/terms

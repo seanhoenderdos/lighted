@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,13 +23,26 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between fixed z-50 w-full p-6 sm:px-12 border border-border-line gap-5 backdrop-blur-xl bg-background/80">
+    <nav className="flex justify-between items-center fixed z-50 w-full h-14 sm:h-16 px-4 sm:px-6 md:px-10 border-b border-border/60 backdrop-blur-xl bg-background/80">
       <Link href="/" className="flex items-center gap-2">
-        <span className="text-2xl font-bold">Lighted</span>
+        <span className="text-xl font-bold font-serif tracking-tight text-foreground">Lighted</span>
       </Link>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-5">
         
+        {!isAuthenticated && (
+          <>
+            <Link href="/sign-in" className="hidden sm:inline text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Sign In
+            </Link>
+            <Button asChild size="sm" className="rounded-full px-5">
+              <Link href="/sign-up">
+                Get Started
+              </Link>
+            </Button>
+          </>
+        )}
+
         {isAuthenticated && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
