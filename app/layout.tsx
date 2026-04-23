@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description:
     "Voice-to-Exegesis for Pastors. Send a voice note via Telegram with your sermon topic or scripture passage, and receive a beautifully crafted exegesis brief in seconds.",
   icons: {
-    icon: "/images/site-logo.svg",
+    icon: [{ url: "/images/site-logo.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "Lighted — Free Sermon Research for Pastors",
