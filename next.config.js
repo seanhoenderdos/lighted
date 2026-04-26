@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    HUGGING_FACE_API_KEY: process.env.HUGGING_FACE_API_KEY,
-    GROQ_API_KEY: process.env.GROQ_API_KEY,
-  },
+
   
   reactStrictMode: true,
   
