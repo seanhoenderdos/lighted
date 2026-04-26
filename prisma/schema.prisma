@@ -127,6 +127,7 @@ model Brief {
   greekInsights      Json?    // Array of { term, meaning, context }
   historicalContext  String?  @db.Text
   outlinePoints      Json?    // Array of { title, content }
+  sermonContent      Json?    // Tiptap document JSON for the sermon editor
   
   // Metadata from Telegram
   telegramMessageId  String?  @unique

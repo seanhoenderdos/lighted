@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,13 @@ import {
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const [mounted, setMounted] = useState(false);
   const isAuthenticated = !!session?.user;
   const userId = session?.user?.id || '';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSignOut = async () => {
     await signOut({ redirect: true, callbackUrl: '/' });
@@ -30,7 +35,7 @@ const Navbar = () => {
 
       <div className="flex items-center gap-3 sm:gap-5">
         
-        {!isAuthenticated && (
+        {mounted && !isAuthenticated && (
           <>
             <Link href="/sign-in" className="hidden sm:inline text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Sign In
@@ -43,7 +48,7 @@ const Navbar = () => {
           </>
         )}
 
-        {isAuthenticated && (
+        {mounted && isAuthenticated && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">

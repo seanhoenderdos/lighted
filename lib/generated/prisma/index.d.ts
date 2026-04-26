@@ -10459,6 +10459,7 @@ export namespace Prisma {
     greekInsights: number
     historicalContext: number
     outlinePoints: number
+    sermonContent: number
     telegramMessageId: number
     telegramChatId: number
     audioFileId: number
@@ -10530,6 +10531,7 @@ export namespace Prisma {
     greekInsights?: true
     historicalContext?: true
     outlinePoints?: true
+    sermonContent?: true
     telegramMessageId?: true
     telegramChatId?: true
     audioFileId?: true
@@ -10638,6 +10640,7 @@ export namespace Prisma {
     greekInsights: JsonValue | null
     historicalContext: string | null
     outlinePoints: JsonValue | null
+    sermonContent: JsonValue | null
     telegramMessageId: string | null
     telegramChatId: string | null
     audioFileId: string | null
@@ -10678,6 +10681,7 @@ export namespace Prisma {
     greekInsights?: boolean
     historicalContext?: boolean
     outlinePoints?: boolean
+    sermonContent?: boolean
     telegramMessageId?: boolean
     telegramChatId?: boolean
     audioFileId?: boolean
@@ -10700,6 +10704,7 @@ export namespace Prisma {
     greekInsights?: boolean
     historicalContext?: boolean
     outlinePoints?: boolean
+    sermonContent?: boolean
     telegramMessageId?: boolean
     telegramChatId?: boolean
     audioFileId?: boolean
@@ -10722,6 +10727,7 @@ export namespace Prisma {
     greekInsights?: boolean
     historicalContext?: boolean
     outlinePoints?: boolean
+    sermonContent?: boolean
     telegramMessageId?: boolean
     telegramChatId?: boolean
     audioFileId?: boolean
@@ -10744,6 +10750,7 @@ export namespace Prisma {
     greekInsights?: boolean
     historicalContext?: boolean
     outlinePoints?: boolean
+    sermonContent?: boolean
     telegramMessageId?: boolean
     telegramChatId?: boolean
     audioFileId?: boolean
@@ -10755,7 +10762,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BriefOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "category" | "originalTranscript" | "greekInsights" | "historicalContext" | "outlinePoints" | "telegramMessageId" | "telegramChatId" | "audioFileId" | "audioDuration" | "userId" | "readTime" | "isBookmarked" | "createdAt" | "updatedAt", ExtArgs["result"]["brief"]>
+  export type BriefOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "category" | "originalTranscript" | "greekInsights" | "historicalContext" | "outlinePoints" | "sermonContent" | "telegramMessageId" | "telegramChatId" | "audioFileId" | "audioDuration" | "userId" | "readTime" | "isBookmarked" | "createdAt" | "updatedAt", ExtArgs["result"]["brief"]>
   export type BriefInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -10781,6 +10788,7 @@ export namespace Prisma {
       greekInsights: Prisma.JsonValue | null
       historicalContext: string | null
       outlinePoints: Prisma.JsonValue | null
+      sermonContent: Prisma.JsonValue | null
       telegramMessageId: string | null
       telegramChatId: string | null
       audioFileId: string | null
@@ -11223,6 +11231,7 @@ export namespace Prisma {
     readonly greekInsights: FieldRef<"Brief", 'Json'>
     readonly historicalContext: FieldRef<"Brief", 'String'>
     readonly outlinePoints: FieldRef<"Brief", 'Json'>
+    readonly sermonContent: FieldRef<"Brief", 'Json'>
     readonly telegramMessageId: FieldRef<"Brief", 'String'>
     readonly telegramChatId: FieldRef<"Brief", 'String'>
     readonly audioFileId: FieldRef<"Brief", 'String'>
@@ -11771,6 +11780,7 @@ export namespace Prisma {
     greekInsights: 'greekInsights',
     historicalContext: 'historicalContext',
     outlinePoints: 'outlinePoints',
+    sermonContent: 'sermonContent',
     telegramMessageId: 'telegramMessageId',
     telegramChatId: 'telegramChatId',
     audioFileId: 'audioFileId',
@@ -12442,6 +12452,7 @@ export namespace Prisma {
     greekInsights?: JsonNullableFilter<"Brief">
     historicalContext?: StringNullableFilter<"Brief"> | string | null
     outlinePoints?: JsonNullableFilter<"Brief">
+    sermonContent?: JsonNullableFilter<"Brief">
     telegramMessageId?: StringNullableFilter<"Brief"> | string | null
     telegramChatId?: StringNullableFilter<"Brief"> | string | null
     audioFileId?: StringNullableFilter<"Brief"> | string | null
@@ -12464,6 +12475,7 @@ export namespace Prisma {
     greekInsights?: SortOrderInput | SortOrder
     historicalContext?: SortOrderInput | SortOrder
     outlinePoints?: SortOrderInput | SortOrder
+    sermonContent?: SortOrderInput | SortOrder
     telegramMessageId?: SortOrderInput | SortOrder
     telegramChatId?: SortOrderInput | SortOrder
     audioFileId?: SortOrderInput | SortOrder
@@ -12490,6 +12502,7 @@ export namespace Prisma {
     greekInsights?: JsonNullableFilter<"Brief">
     historicalContext?: StringNullableFilter<"Brief"> | string | null
     outlinePoints?: JsonNullableFilter<"Brief">
+    sermonContent?: JsonNullableFilter<"Brief">
     telegramChatId?: StringNullableFilter<"Brief"> | string | null
     audioFileId?: StringNullableFilter<"Brief"> | string | null
     audioDuration?: IntNullableFilter<"Brief"> | number | null
@@ -12511,6 +12524,7 @@ export namespace Prisma {
     greekInsights?: SortOrderInput | SortOrder
     historicalContext?: SortOrderInput | SortOrder
     outlinePoints?: SortOrderInput | SortOrder
+    sermonContent?: SortOrderInput | SortOrder
     telegramMessageId?: SortOrderInput | SortOrder
     telegramChatId?: SortOrderInput | SortOrder
     audioFileId?: SortOrderInput | SortOrder
@@ -12540,6 +12554,7 @@ export namespace Prisma {
     greekInsights?: JsonNullableWithAggregatesFilter<"Brief">
     historicalContext?: StringNullableWithAggregatesFilter<"Brief"> | string | null
     outlinePoints?: JsonNullableWithAggregatesFilter<"Brief">
+    sermonContent?: JsonNullableWithAggregatesFilter<"Brief">
     telegramMessageId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
     telegramChatId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
     audioFileId?: StringNullableWithAggregatesFilter<"Brief"> | string | null
@@ -13119,6 +13134,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -13140,6 +13156,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -13161,6 +13178,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13182,6 +13200,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13203,6 +13222,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -13224,6 +13244,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13244,6 +13265,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13760,6 +13782,7 @@ export namespace Prisma {
     greekInsights?: SortOrder
     historicalContext?: SortOrder
     outlinePoints?: SortOrder
+    sermonContent?: SortOrder
     telegramMessageId?: SortOrder
     telegramChatId?: SortOrder
     audioFileId?: SortOrder
@@ -14710,6 +14733,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -14730,6 +14754,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -14890,6 +14915,7 @@ export namespace Prisma {
     greekInsights?: JsonNullableFilter<"Brief">
     historicalContext?: StringNullableFilter<"Brief"> | string | null
     outlinePoints?: JsonNullableFilter<"Brief">
+    sermonContent?: JsonNullableFilter<"Brief">
     telegramMessageId?: StringNullableFilter<"Brief"> | string | null
     telegramChatId?: StringNullableFilter<"Brief"> | string | null
     audioFileId?: StringNullableFilter<"Brief"> | string | null
@@ -15364,6 +15390,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: string | null
     telegramChatId?: string | null
     audioFileId?: string | null
@@ -15474,6 +15501,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15494,6 +15522,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15514,6 +15543,7 @@ export namespace Prisma {
     greekInsights?: NullableJsonNullValueInput | InputJsonValue
     historicalContext?: NullableStringFieldUpdateOperationsInput | string | null
     outlinePoints?: NullableJsonNullValueInput | InputJsonValue
+    sermonContent?: NullableJsonNullValueInput | InputJsonValue
     telegramMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     telegramChatId?: NullableStringFieldUpdateOperationsInput | string | null
     audioFileId?: NullableStringFieldUpdateOperationsInput | string | null
